@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:primero_app_flutter/screens/dog_detail.dart';
+import 'package:primero_app_flutter/utils/Helper.dart';
 
 class Dog {
   String nome;
@@ -7,7 +9,14 @@ class Dog {
   Dog(this.nome, this.foto);
 }
 
-class HelloListView extends StatelessWidget {
+class HelloListView extends StatefulWidget {
+  @override
+  _HelloListViewState createState() => _HelloListViewState();
+}
+
+class _HelloListViewState extends State<HelloListView> {
+  bool _gridView = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,8 +25,18 @@ class HelloListView extends StatelessWidget {
         centerTitle: true,
         backgroundColor: Colors.blue,
         actions: <Widget>[
-          IconButton(icon: Icon(Icons.list), onPressed: () => print('teste')),
-          IconButton(icon: Icon(Icons.grid_on), onPressed: () => print('teste 2')),
+          IconButton(
+            icon: Icon(Icons.list),
+            onPressed: () => setState(() {
+              _gridView = false;
+            }),
+          ),
+          IconButton(
+            icon: Icon(Icons.grid_on),
+            onPressed: () => setState(() {
+              _gridView = true;
+            }),
+          ),
         ],
       ),
       body: _renderBody(),
@@ -59,42 +78,25 @@ class HelloListView extends StatelessWidget {
     ];
 
     //lista dinamica
-    return GridView.builder(
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-      itemCount: dogs.length,
-      itemBuilder: (context, index) {
-        Dog dog = dogs[index];
 
-        return Stack(
-          fit: StackFit.expand, // extende a imagem, só funciona se a ListView possuir itemExtent
-          children: <Widget>[
-            //SizedBox.expand(//Mesmo funcionamento do fit: StackFit.expand
-            _renderImage(dog.foto),
-            Container(
-                padding: EdgeInsets.only(left: 10, bottom: 10),
-                alignment: Alignment.bottomLeft,
-                child: Container(
-                  padding: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: Colors.black54,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(10),
-                    ),
-                  ),
-                  child: Text(
-                    dog.nome,
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                )),
-            //)
-          ],
-        );
-      },
-    );
+    if (_gridView) {
+      return GridView.builder(
+        gridDelegate:
+            SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+        itemCount: dogs.length,
+        itemBuilder: (context, index) {
+          return _renderItemList(dogs, context, index);
+        },
+      );
+    } else {
+      return ListView.builder(
+        itemExtent: 350,
+        itemCount: dogs.length,
+        itemBuilder: (context, index) {
+          return _renderItemList(dogs, context, index);
+        },
+      );
+    }
 
     //Lista não dinamica
     /*ListView(
@@ -130,6 +132,43 @@ class HelloListView extends StatelessWidget {
         ),
       ],
     );*/
+  }
+
+  _renderItemList(List<Dog> dogs, context, index) {
+    Dog dog = dogs[index];
+
+    return GestureDetector(
+      onTap: () => push(context, DogPage(dog)),
+      child: Stack(
+        fit: StackFit
+            .expand, // extende a imagem, só funciona se a ListView possuir itemExtent
+        children: <Widget>[
+          //SizedBox.expand(//Mesmo funcionamento do fit: StackFit.expand
+          _renderImage(dog.foto),
+          Container(
+              padding: EdgeInsets.only(left: 10, bottom: 10),
+              alignment: Alignment.bottomLeft,
+              child: Container(
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.black54,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(10),
+                  ),
+                ),
+                child: Text(
+                  dog.nome,
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              )),
+          //)
+        ],
+      ),
+    );
   }
 
   Image _renderImage(String imagePath) {

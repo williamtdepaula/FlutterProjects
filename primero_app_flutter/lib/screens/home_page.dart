@@ -33,7 +33,7 @@ class HomePage extends StatelessWidget {
         children: <Widget>[
           _renderText(),
           _renderCarrouselImages(),
-          _renderContainerButtons(context),
+          _renderContainerButtons(),
         ],
       ),
     );
@@ -72,38 +72,54 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  _renderContainerButtons(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  _renderContainerButtons() {
+    return Builder(
+      builder: (context) {
+        return Column(
           children: <Widget>[
-            BlueButton('ListView',
-                onPressed: () => onClickButton(context, HelloListView())),
-            BlueButton('Page 2',
-                onPressed: () => onClickButton(context, Hello_page2())),
-            BlueButton('Page 3',
-                onPressed: () => onClickButton(context, Hello_page3())),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                BlueButton('ListView',
+                    onPressed: () => onClickButton(context, HelloListView())),
+                BlueButton('Page 2',
+                    onPressed: () => onClickButton(context, Hello_page2())),
+                BlueButton('Page 3',
+                    onPressed: () => onClickButton(context, Hello_page3())),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                BlueButton('Snack',
+                    onPressed: () => _onClickSnack(context, ' Hello_page1()')),
+                BlueButton('Dialog',
+                    onPressed: () => _onClickDialog(context, 'Hello_page1()')),
+                BlueButton('Toast',
+                    onPressed: () => _onClickToast(context, ' Hello_page1()')),
+              ],
+            )
           ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            BlueButton('Snack',
-                onPressed: () => onClickButton(context, Hello_page1())),
-            BlueButton('Dialog',
-                onPressed: () => onClickButton(context, Hello_page1())),
-            BlueButton('Toast',
-                onPressed: () => onClickButton(context, Hello_page1())),
-          ],
-        )
-      ],
+        );
+      },
     );
   }
 
-  _onClickSnack() {}
-  _onClickDialog() {}
-  _onClickToast() {}
+  _onClickSnack(context, text) {
+    Scaffold.of(context).showSnackBar(
+      SnackBar(
+        content: Text(text),
+        action: SnackBarAction(
+          textColor: Colors.white,
+          label: 'OK',
+          onPressed: () => print('Snack'),
+        ),
+      ),
+    );
+  }
+
+  _onClickDialog(context, text) {}
+  _onClickToast(context, text) {}
 
   /*_renderButton(String textButton, Function onPressed) {
     return BlueButton(textButton, () => onPressed());
