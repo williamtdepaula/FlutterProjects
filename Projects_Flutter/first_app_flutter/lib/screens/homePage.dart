@@ -37,12 +37,14 @@ class Home extends StatelessWidget {
           children: <Widget>[
             FloatingActionButton(
               child: Icon(Icons.add),
+              onPressed: null
             ),
             SizedBox(
               width: 20,
             ),
             FloatingActionButton(
               child: Icon(Icons.headset),
+              onPressed: null
             ),
           ],
         ),
