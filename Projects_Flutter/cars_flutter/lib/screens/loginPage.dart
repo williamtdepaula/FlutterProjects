@@ -86,7 +86,7 @@ class _LoginPageState extends State<LoginPage> {
     if (responseUserLogin.ok) {//Se estiver ok deu certo o login
       User user = responseUserLogin.result;
       print('User > $user');
-      Helper.pushNavigator(context, HomePage(), replace: true);
+      Helper.pushNavigator(context, HomePage(TypeCar.classics), replace: true);
     } else {//Caso não esteja ok
       Helper.alert(context, content: Text(responseUserLogin.msg));
       print('Error > ${responseUserLogin.msg}');

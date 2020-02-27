@@ -6,6 +6,14 @@ import 'package:http/http.dart' as http;
 
 import '../models/User.dart';
 
+class TypeCar  {
+  static final String classics = "classics";
+  
+  static final String sporting = "sporting";
+  
+  static final String lux = "lux";
+}
+
 class Api {
   static Future<ApiResponse> login(String email, String password) async {
     try {
@@ -36,37 +44,18 @@ class Api {
     }
   }
 
-  static List<Car> getCars() {
-    //try {
+  static Future<List<Car>> getCars(String type) async {
+    String loginURL = 'https://carros-springboot.herokuapp.com/api/v1/carros/tipos/$type';
 
-    String loginURL = 'https://carros-springboot.herokuapp.com/api/v2/login';
+    var response = await http.get(loginURL);
 
-    List<Car> cars = [];
+    List responseBody = json.decode(response.body);
 
-    cars.add(Car(
-      nome: 'Ferrari FF',
-      urlFoto:
-          'http://www.livroandroid.com.br/livro/carros/esportivos/Ferrari_FF.png',
-      descricao: 'Carro ferrari',
-    ));
-    cars.add(Car(
-      nome: 'Porsche Panamera',
-      urlFoto:
-          "http://www.livroandroid.com.br/livro/carros/esportivos/Porsche_Panamera.png",
-      descricao: 'Carro ferrari',
-    ));
-    cars.add(Car(
-      nome: 'Lamborghini Aventador',
-      urlFoto:
-          'http://www.livroandroid.com.br/livro/carros/esportivos/Lamborghini_Aventador.png',
-      descricao: 'Carro ferrari',
-    ));
+    List<Car> carsResponse = responseBody.map((car) => Car.fromJson(car)).toList();
 
-    return cars;
-    /*} catch (error, exception) {
-      print('ERROR REQUEST $error');
-      return Car();
-      //return ApiResponse.error('Não foi possível completar a requisição');
-    }*/
+    print("CARS $carsResponse");
+
+    return carsResponse;
+
   }
 }

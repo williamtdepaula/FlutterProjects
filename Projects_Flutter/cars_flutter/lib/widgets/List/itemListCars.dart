@@ -21,13 +21,13 @@ class ItemListCars extends StatelessWidget {
           crossAxisAlignment:
               CrossAxisAlignment.start, //Alinha os itens no começo
           children: <Widget>[
-            Center(child: Image.network(car.urlFoto)),
+            Center(child: Image.network(car.urlFoto ?? 'https://lh3.googleusercontent.com/proxy/hOvu12FGsP-F8SoGoIPRB4RsEPoiLjLTqIUd0Hy_0FSThVyciO2azZ3Io2TxboNGvK_PFFOber7Ehtdx58lasj0pWIyjfc6xcKKECqDmxuWkWiCoDxJUIM4uFn8')),
             Text(
-              car.nome,
+              car.nome ?? 'Carro',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             Text(
-              car.descricao,
+              car.descricao ?? 'Carro detalhes...',
               style: TextStyle(fontSize: 16),
             ),
             ButtonBar(
