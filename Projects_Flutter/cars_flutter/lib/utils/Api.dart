@@ -7,11 +7,11 @@ import 'package:http/http.dart' as http;
 import '../models/User.dart';
 
 class TypeCar  {
-  static final String classics = "classics";
+  static final String classics = "classicos";
   
-  static final String sporting = "sporting";
+  static final String sporting = "esportivos";
   
-  static final String lux = "lux";
+  static final String lux = "luxo";
 }
 
 class Api {
@@ -45,15 +45,17 @@ class Api {
   }
 
   static Future<List<Car>> getCars(String type) async {
-    String loginURL = 'https://carros-springboot.herokuapp.com/api/v1/carros/tipos/$type';
+    print('TYPE > $type');
+
+    String loginURL = 'https://carros-springboot.herokuapp.com/api/v1/carros/tipo/$type';
+
+    print("Get car >  $loginURL");
 
     var response = await http.get(loginURL);
 
     List responseBody = json.decode(response.body);
 
     List<Car> carsResponse = responseBody.map((car) => Car.fromJson(car)).toList();
-
-    print("CARS $carsResponse");
 
     return carsResponse;
 
