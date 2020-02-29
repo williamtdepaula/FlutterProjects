@@ -28,11 +28,14 @@ class Api {
       Map responseBody = json.decode(response.body);
 
       print('Response status: ${response.statusCode}');
-      print('Response body: ${responseBody}');
+      print('Response body: ${response.body}');
 
-      if (response.statusCode == 200) {
-        //Caso ocorreu a requisição corretamente
-        return ApiResponse.ok(User(responseBody));
+      if (response.statusCode == 200) {//Caso ocorreu a requisição corretamente
+        User user = User(responseBody);
+
+        user.saveUserOnPreferences();
+
+        return ApiResponse.ok(user);
       }
 
       return ApiResponse.error(responseBody[
