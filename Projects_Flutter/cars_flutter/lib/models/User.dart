@@ -44,8 +44,16 @@ class User {
 
   }
 
+  static void clearUserOnPreferences(){
+    Prefs.setString('user.data', '');
+  }
+
   static Future<User> getUserFromPreferences() async {
-    Map userMap = json.decode(await Prefs.getString('user.data'));//Pego o json do banco e transformo para Map(Objeto do JS)
+    String userFromPreferences = await await Prefs.getString('user.data');
+
+    if(userFromPreferences.isEmpty) return null;
+
+    Map userMap = json.decode(userFromPreferences);//Pego o json do banco e transformo para Map(Objeto do JS)
     
     return User(userMap);//Crio um objeto do dart
   }

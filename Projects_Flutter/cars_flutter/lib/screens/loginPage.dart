@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:cars_flutter/models/ApiResponse.dart';
+import 'package:cars_flutter/models/LoginBloc.dart';
 import 'package:cars_flutter/models/User.dart';
 import 'package:cars_flutter/screens/homePage.dart';
 import 'package:cars_flutter/utils/Api.dart';
@@ -15,15 +18,30 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final keyFormLogin = GlobalKey<FormState>();
-  final loginTextController = TextEditingController(text: 'admin');
-  final passwordTextController = TextEditingController(text: '123');
+  final loginTextController = TextEditingController();
+  final passwordTextController = TextEditingController();
   final focusPassword = FocusNode();
+
+  LoginBloc _blocLogin = LoginBloc();
 
   bool loading = false;
 
   @override
-  void initState() => super
-      .initState(); //Consigo pegar o conexto em qualquer parte dessa classe
+  void initState() {
+    super.initState(); //Consigo pegar o conexto em qualquer parte dessa classe
+
+    Future<User> userFuture = User.getUserFromPreferences();
+
+    userFuture.then((user) {
+      if (user != null) {
+        Helper.pushNavigator(context, HomePage(), replace: true);
+
+        /*setState(() {
+          loginTextController.text = user.nome;
+        });*/
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,11 +76,16 @@ class _LoginPageState extends State<LoginPage> {
                 textInputType: TextInputType.number,
                 focusNode: focusPassword,
               ),
-              ButtonDefault(
-                'Logar',
-                onPress: () => _tryLogin(),
-                showProgress: loading,
-              ),
+              StreamBuilder<bool>(
+                  stream: _blocLogin.buttonBloc.stream,
+                  initialData: false, //Qual valor deve começar a snapshot
+                  builder: (context, snapShot) {
+                    return ButtonDefault(
+                      'Logar',
+                      onPress: () => _tryLogin(),
+                      showProgress: snapShot.data,
+                    );
+                  })
             ],
           ),
         ),
@@ -76,24 +99,27 @@ class _LoginPageState extends State<LoginPage> {
       return; //Não faz nada
     }
 
-    setState(() {
-      loading = true;
-    });
+    ApiResponse responseUserLogin = await _blocLogin.loginUser(
+        loginTextController.text, passwordTextController.text);
 
-    ApiResponse responseUserLogin =
-        await Api.login(loginTextController.text, passwordTextController.text);
-
-    if (responseUserLogin.ok) {//Se estiver ok deu certo o login
+    if (responseUserLogin.ok) {
+      //Se estiver ok deu certo o login
       User user = responseUserLogin.result;
       print('User > $user');
       Helper.pushNavigator(context, HomePage(), replace: true);
-    } else {//Caso não esteja ok
+    } else {
+      //Caso não esteja ok
       Helper.alert(context, content: Text(responseUserLogin.msg));
       print('Error > ${responseUserLogin.msg}');
     }
-    
-    setState(() {
-      loading = false;
-    });
+  }
+
+  @override
+  void dispose() {
+    //O mesmo que componetWillUnmout()
+    // TODO: implement dispose
+    super.dispose();
+
+    _blocLogin.buttonBloc.clearStream();
   }
 }

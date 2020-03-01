@@ -6,11 +6,11 @@ import 'package:http/http.dart' as http;
 
 import '../models/User.dart';
 
-class TypeCar  {
+class TypeCar {
   static final String classics = "classicos";
-  
+
   static final String sporting = "esportivos";
-  
+
   static final String lux = "luxo";
 }
 
@@ -30,7 +30,8 @@ class Api {
       print('Response status: ${response.statusCode}');
       print('Response body: ${response.body}');
 
-      if (response.statusCode == 200) {//Caso ocorreu a requisição corretamente
+      if (response.statusCode == 200) {
+        //Caso ocorreu a requisição corretamente
         User user = User(responseBody);
 
         user.saveUserOnPreferences();
@@ -48,19 +49,25 @@ class Api {
   }
 
   static Future<List<Car>> getCars(String type) async {
-    print('TYPE > $type');
+    User userPrefs = await User.getUserFromPreferences();
 
-    String loginURL = 'https://carros-springboot.herokuapp.com/api/v1/carros/tipo/$type';
+    String loginURL =
+        'https://carros-springboot.herokuapp.com/api/v2/carros/tipo/$type';
 
     print("Get car >  $loginURL");
 
-    var response = await http.get(loginURL);
+    var response = await http.get(loginURL, headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer ${userPrefs.token}"
+    });
+
+    print('RESPONSE ${userPrefs.token}');
 
     List responseBody = json.decode(response.body);
 
-    List<Car> carsResponse = responseBody.map((car) => Car.fromJson(car)).toList();
+    List<Car> carsResponse =
+        responseBody.map((car) => Car.fromJson(car)).toList();
 
     return carsResponse;
-
   }
 }

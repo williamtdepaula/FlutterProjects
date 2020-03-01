@@ -1,3 +1,4 @@
+import 'package:cars_flutter/models/User.dart';
 import 'package:cars_flutter/screens/loginPage.dart';
 
 import '../../utils/Helper.dart';
@@ -10,19 +11,29 @@ class DrawerDefault extends StatelessWidget {
   }
 
   SafeArea _handleRenderDrawer(context) {
+    Future<User> userFuture = User.getUserFromPreferences();
+
     return SafeArea(
       child: Drawer(
         child: ListView(
           children: <Widget>[
-            UserAccountsDrawerHeader(
-              currentAccountPicture: CircleAvatar(
-                backgroundImage: NetworkImage(
-                    'https://cdn4.iconfinder.com/data/icons/avatars-21/512/avatar-circle-human-male-3-512.png'),
-              ),
-              accountEmail: Text('williamtristao@hotmail.com'),
-              accountName: Text('William Tristão'),
-              decoration: BoxDecoration(color: Colors.blue),
-            ),
+            FutureBuilder(
+                future: userFuture,
+                builder: (BuildContext context, snapshot) {
+                  if (snapshot.hasData) {
+                    User user = snapshot.data;
+
+                    return UserAccountsDrawerHeader(
+                      currentAccountPicture: CircleAvatar(
+                          backgroundImage: NetworkImage(user.urlFoto)),
+                      accountEmail: Text(user.email),
+                      accountName: Text(user.nome),
+                      decoration: BoxDecoration(color: Colors.blue),
+                    );
+                  } else {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                }),
             _handleRenderItemListDrawer(
                 Icons.star, 'Favoritos', 'clique aqui...', Icons.arrow_forward),
             _handleRenderItemListDrawer(
@@ -49,7 +60,9 @@ class DrawerDefault extends StatelessWidget {
   }
 
   void _logoutUser(BuildContext context) {
-    Helper.popNavigator(context);//Fecha o drawer
-    Helper.pushNavigator(context, LoginPage(), replace: true);//Volta pra tela de login
+    Helper.popNavigator(context); //Fecha o drawer
+    Helper.pushNavigator(context, LoginPage(),
+        replace: true); //Volta pra tela de login
+    User.clearUserOnPreferences();
   }
 }

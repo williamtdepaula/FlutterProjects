@@ -1,4 +1,6 @@
 import 'package:cars_flutter/models/Cars.dart';
+import 'package:cars_flutter/screens/carDetails.dart';
+import 'package:cars_flutter/utils/Helper.dart';
 import 'package:flutter/material.dart';
 
 class ItemListCars extends StatelessWidget {
@@ -8,10 +10,10 @@ class ItemListCars extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _handleRenderItemList();
+    return _handleRenderItemList(context);
   }
 
-  _handleRenderItemList() {
+  _handleRenderItemList(context) {
     return Card(
       margin: EdgeInsets.all(10),
       color: Colors.grey[100],
@@ -34,7 +36,7 @@ class ItemListCars extends StatelessWidget {
               children: <Widget>[
                 FlatButton(
                   child: const Text('Detalhes'),
-                  onPressed: () {/* ... */},
+                  onPressed: ()  => _clickCar(context),
                 ),
                 FlatButton(
                   child: const Text('Share'),
@@ -46,5 +48,9 @@ class ItemListCars extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  _clickCar(context){
+    Helper.pushNavigator(context, CarDetails(this.car));
   }
 }
