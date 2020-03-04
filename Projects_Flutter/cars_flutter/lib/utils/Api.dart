@@ -70,4 +70,17 @@ class Api {
 
     return carsResponse;
   }
+
+  static Future<String> getLorem() async{
+    String url = 'https://loripsum.net/api';
+
+    var response = (await http.get(url)).body;
+
+    var text = response.replaceAll('<p>', "");
+    
+    text = text.replaceAll('</p>', "");
+
+    return text;
+
+  }
 }
