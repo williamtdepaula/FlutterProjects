@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cars_flutter/models/Cars.dart';
 import 'package:cars_flutter/screens/carDetails.dart';
 import 'package:cars_flutter/utils/Helper.dart';
@@ -23,7 +24,7 @@ class ItemListCars extends StatelessWidget {
           crossAxisAlignment:
               CrossAxisAlignment.start, //Alinha os itens no começo
           children: <Widget>[
-            Center(child: Image.network(car.urlFoto ?? 'https://lh3.googleusercontent.com/proxy/hOvu12FGsP-F8SoGoIPRB4RsEPoiLjLTqIUd0Hy_0FSThVyciO2azZ3Io2TxboNGvK_PFFOber7Ehtdx58lasj0pWIyjfc6xcKKECqDmxuWkWiCoDxJUIM4uFn8')),
+            Center(child: CachedNetworkImage(imageUrl: car.urlFoto ?? 'https://lh3.googleusercontent.com/proxy/hSRSRlpE4uW0vqs9S4wdoObX4FduWRID5AvdgZ6SPrdtmluKoUeUIe5xnSD4b08A_4N11kbsqNxVo44i8gPAkI0oNBe4aqRnag_zDpOoRxW6mx3pu37WPJrifzhfoEE')),
             Text(
               car.nome ?? 'Carro',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),

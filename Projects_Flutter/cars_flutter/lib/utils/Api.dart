@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:cars_flutter/models/ApiResponse.dart';
 import 'package:cars_flutter/models/Cars.dart';
 import 'package:http/http.dart' as http;
+import '../dataBases/Car/CarDAO.dart';
 
 import '../models/User.dart';
 
@@ -71,16 +72,15 @@ class Api {
     return carsResponse;
   }
 
-  static Future<String> getLorem() async{
+  static Future<String> getLorem() async {
     String url = 'https://loripsum.net/api';
 
     var response = (await http.get(url)).body;
 
     var text = response.replaceAll('<p>', "");
-    
+
     text = text.replaceAll('</p>', "");
 
     return text;
-
   }
 }

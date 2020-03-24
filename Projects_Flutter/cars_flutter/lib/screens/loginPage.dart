@@ -30,6 +30,8 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState(); //Consigo pegar o conexto em qualquer parte dessa classe
 
+  /*  AGORA É FEITO NA LOAD PAGE
+
     Future<User> userFuture = User.getUserFromPreferences();
 
     userFuture.then((user) {
@@ -41,6 +43,7 @@ class _LoginPageState extends State<LoginPage> {
         });*/
       }
     });
+  */
   }
 
   @override

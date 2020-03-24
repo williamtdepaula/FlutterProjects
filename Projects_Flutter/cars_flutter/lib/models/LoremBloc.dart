@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:cars_flutter/models/SimpleBloc.dart';
 import 'package:cars_flutter/utils/Api.dart';
 
 class LoremBloc {

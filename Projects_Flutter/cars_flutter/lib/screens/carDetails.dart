@@ -1,9 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cars_flutter/models/Cars.dart';
 import 'package:cars_flutter/models/LoremBloc.dart';
 import 'package:flutter/material.dart';
 
-class CarDetails extends StatefulWidget{
-  
+class CarDetails extends StatefulWidget {
   Car car;
 
   CarDetails(this.car);
@@ -11,7 +11,6 @@ class CarDetails extends StatefulWidget{
   @override
   _CarDetailsState createState() => _CarDetailsState();
 }
-
 
 class _CarDetailsState extends State<CarDetails> {
   LoremBloc _loremBloc = LoremBloc();
@@ -27,21 +26,23 @@ class _CarDetailsState extends State<CarDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:
-          AppBar(title: Text(widget.car.nome), centerTitle: true, actions: <Widget>[
-        IconButton(icon: Icon(Icons.place), onPressed: () {}),
-        IconButton(icon: Icon(Icons.videocam), onPressed: () {}),
-        PopupMenuButton<String>(
-          onSelected: (String value) => onSelectedItemPopupMenu(value),
-          itemBuilder: (context) {
-            return [
-              PopupMenuItem(value: 'Editar', child: Text('Editar')),
-              PopupMenuItem(value: 'Deletar', child: Text('Deletar')),
-              PopupMenuItem(value: 'Share', child: Text('Share')),
-            ];
-          },
-        )
-      ]),
+      appBar: AppBar(
+          title: Text(widget.car.nome),
+          centerTitle: true,
+          actions: <Widget>[
+            IconButton(icon: Icon(Icons.place), onPressed: () {}),
+            IconButton(icon: Icon(Icons.videocam), onPressed: () {}),
+            PopupMenuButton<String>(
+              onSelected: (String value) => onSelectedItemPopupMenu(value),
+              itemBuilder: (context) {
+                return [
+                  PopupMenuItem(value: 'Editar', child: Text('Editar')),
+                  PopupMenuItem(value: 'Deletar', child: Text('Deletar')),
+                  PopupMenuItem(value: 'Share', child: Text('Share')),
+                ];
+              },
+            )
+          ]),
       body: _handleRenderBody(),
     );
   }
@@ -62,7 +63,7 @@ class _CarDetailsState extends State<CarDetails> {
   _handleRenderAboutCar() {
     return Column(
       children: <Widget>[
-        Center(child: Image.network(widget.car.urlFoto)),
+        Center(child: CachedNetworkImage(imageUrl: widget.car.urlFoto)),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
@@ -125,7 +126,9 @@ class _CarDetailsState extends State<CarDetails> {
                 style: TextStyle(color: Colors.black, fontSize: 14),
               );
             } else {
-              return Center(child: CircularProgressIndicator(),);
+              return Center(
+                child: CircularProgressIndicator(),
+              );
             }
           },
         ),

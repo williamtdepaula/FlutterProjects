@@ -35,28 +35,31 @@ class User {
     return data;
   }
 
+  @override
+  String toString() {
+    return 'Usuario{login: $login nome: $nome} ';
+  }
+
   void saveUserOnPreferences() {
     Map userMap = this.toMap();
 
     String userJSON = json.encode(userMap);
 
     Prefs.setString('user.data', userJSON);
-
   }
 
-  static void clearUserOnPreferences(){
+  static void clearUserOnPreferences() {
     Prefs.setString('user.data', '');
   }
 
   static Future<User> getUserFromPreferences() async {
     String userFromPreferences = await await Prefs.getString('user.data');
 
-    if(userFromPreferences.isEmpty) return null;
+    if (userFromPreferences.isEmpty) return null;
 
-    Map userMap = json.decode(userFromPreferences);//Pego o json do banco e transformo para Map(Objeto do JS)
-    
-    return User(userMap);//Crio um objeto do dart
+    Map userMap = json.decode(
+        userFromPreferences); //Pego o json do banco e transformo para Map(Objeto do JS)
+
+    return User(userMap); //Crio um objeto do dart
   }
-
 }
-
