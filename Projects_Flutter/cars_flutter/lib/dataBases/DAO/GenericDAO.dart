@@ -22,20 +22,23 @@ abstract class GenericDAO<T extends Entity> {
   }
 
   Future<List<T>> findAll() async {
+    return await this.query('select * from $nameTable');
+  }
+
+  Future<List<T>> query(String sql, [List<dynamic> arguments]) async {
     final dbClient = await db;
 
-    final list = await dbClient.rawQuery('select * from $nameTable');
+    final list = await dbClient.rawQuery(sql, arguments);
 
     return list.map<T>((json) => fromJson(json)).toList();
   }
 
   Future<T> findById(int id) async {
-    var dbClient = await db;
     final list =
-        await dbClient.rawQuery('select * from $nameTable where id = ?', [id]);
+        await this.query('select * from $nameTable where id = ?', [id]);
 
     if (list.length > 0) {
-      return fromJson(list.first);
+      return list.first;
     }
 
     return null;
@@ -48,14 +51,13 @@ abstract class GenericDAO<T extends Entity> {
   }
 
   Future<int> count() async {
-    final dbClient = await db;
-    final list = await dbClient.rawQuery('select count(*) from $nameTable');
-    return Sqflite.firstIntValue(list);
+    return (await this.query('select count(*) from $nameTable')).length;
   }
 
   Future<int> delete(int id) async {
     var dbClient = await db;
-    return await dbClient.rawDelete('delete from $nameTable where id = ?', [id]);
+    return await dbClient
+        .rawDelete('delete from $nameTable where id = ?', [id]);
   }
 
   Future<int> deleteAll() async {

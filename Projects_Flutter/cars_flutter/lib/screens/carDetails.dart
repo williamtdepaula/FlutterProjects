@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cars_flutter/Service/FavoriteService.dart';
 import 'package:cars_flutter/models/Cars.dart';
 import 'package:cars_flutter/models/LoremBloc.dart';
 import 'package:flutter/material.dart';
@@ -142,7 +143,11 @@ class _CarDetailsState extends State<CarDetails> {
     if (valueSelected == 'Share') print('Share');
   }
 
-  clickOnFavorite() {}
+  clickOnFavorite() {
+    FavoriteService favoriteService = new FavoriteService();
+
+    favoriteService.favoriteCar(widget.car);
+  }
 
   clickOnShare() {}
 

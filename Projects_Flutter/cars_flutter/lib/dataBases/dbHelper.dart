@@ -25,7 +25,7 @@ class DatabaseHelper {
     String path = join(databasesPath, 'carros.db');
     print("db $path");
 
-    var db = await openDatabase(path, version: 2, onCreate: _onCreate, onUpgrade: _onUpgrade);
+    var db = await openDatabase(path, version: 3, onCreate: _onCreate, onUpgrade: _onUpgrade);
     return db;
   }
 
@@ -38,8 +38,8 @@ class DatabaseHelper {
   Future<FutureOr<void>> _onUpgrade(Database db, int oldVersion, int newVersion) async {
     print("_onUpgrade: oldVersion: $oldVersion > newVersion: $newVersion");
 
-    if(oldVersion == 1 && newVersion == 2) {
-      await db.execute("alter table carro add column NOVA TEXT");
+    if(oldVersion == 2 && newVersion == 3) {
+      await db.execute("CREATE TABLE favorito(id INTEGER PRIMARY KEY, nome TEXT)");
     }
   }
 
