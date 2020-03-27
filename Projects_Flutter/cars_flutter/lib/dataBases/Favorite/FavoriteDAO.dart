@@ -9,4 +9,6 @@ class FavoriteDAO extends GenericDAO<Favorite>{
   Favorite fromJson(Map<String, dynamic> map){
     return Favorite.fromJson(map);
   }
+
+  
 }

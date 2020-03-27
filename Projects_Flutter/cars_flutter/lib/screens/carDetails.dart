@@ -14,6 +14,8 @@ class CarDetails extends StatefulWidget {
 }
 
 class _CarDetailsState extends State<CarDetails> {
+  Color colorFavorite = Colors.grey;
+
   LoremBloc _loremBloc = LoremBloc();
 
   @override
@@ -21,8 +23,44 @@ class _CarDetailsState extends State<CarDetails> {
     // TODO: implement initState
     super.initState();
 
+    verifyIfIsFavorite();
+
     _loremBloc.getLorem();
+    
   }
+
+  verifyIfIsFavorite() async {
+    FavoriteService favoriteService = new FavoriteService();
+
+    bool isFavorite = await favoriteService.exists(widget.car.id);
+
+    setCarIsFavorite(isFavorite);
+  }
+
+  onSelectedItemPopupMenu(String valueSelected) {
+    if (valueSelected == 'Editar') print('Editar');
+    if (valueSelected == 'Deletar') print('Deletar');
+    if (valueSelected == 'Share') print('Share');
+  }
+
+  clickOnFavorite() async {
+    FavoriteService favoriteService = new FavoriteService();
+
+    print("enter2");
+    bool save = await favoriteService.favoriteCar(context, widget.car);
+
+    print("enter1");
+
+    setCarIsFavorite(save);
+  }
+
+  setCarIsFavorite(isFavorite) {
+    setState(() {
+      colorFavorite = isFavorite ? Colors.red : Colors.grey;
+    });
+  }
+
+  clickOnShare() {}
 
   @override
   Widget build(BuildContext context) {
@@ -71,17 +109,21 @@ class _CarDetailsState extends State<CarDetails> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text(widget.car.nome,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    )),
-                Text(widget.car.tipo,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                    )),
+                Text(
+                  widget.car.nome,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  widget.car.tipo,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                  ),
+                ),
               ],
             ),
             Row(
@@ -91,7 +133,7 @@ class _CarDetailsState extends State<CarDetails> {
                   icon: Icon(
                     Icons.favorite,
                     size: 40,
-                    color: Colors.red,
+                    color: colorFavorite,
                   ),
                   onPressed: clickOnFavorite,
                 ),
@@ -136,20 +178,6 @@ class _CarDetailsState extends State<CarDetails> {
       ],
     );
   }
-
-  onSelectedItemPopupMenu(String valueSelected) {
-    if (valueSelected == 'Editar') print('Editar');
-    if (valueSelected == 'Deletar') print('Deletar');
-    if (valueSelected == 'Share') print('Share');
-  }
-
-  clickOnFavorite() {
-    FavoriteService favoriteService = new FavoriteService();
-
-    favoriteService.favoriteCar(widget.car);
-  }
-
-  clickOnShare() {}
 
   @override
   void dispose() {

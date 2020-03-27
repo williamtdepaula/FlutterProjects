@@ -1,25 +1,39 @@
+import 'package:cars_flutter/dataBases/Car/CarDAO.dart';
 import 'package:cars_flutter/dataBases/Favorite/FavoriteDAO.dart';
 import 'package:cars_flutter/models/Cars.dart';
 import 'package:cars_flutter/models/Favorite.dart';
+import 'package:provider/provider.dart';
+import '../models/FavoriteBloc.dart';
 
 class FavoriteService extends FavoriteDAO {
-  favoriteCar(Car car) async {
+  Future<bool> favoriteCar(context, Car car) async {
     Favorite fav = new Favorite.fromCar(car);
-
+  
     bool exist = await exists(car.id);
 
-    if (exist)
+    if (exist) {
+    
       delete(car.id);
-    else
+      
+      Provider.of<FavoriteBloc>(context, listen: false).getCarsFavoritesFromDB();
+
+      return false;
+    
+    } else {
+    
       await save(fav);
+    
+      Provider.of<FavoriteBloc>(context, listen: false).getCarsFavoritesFromDB();
+    
+      return true;
+    
+    }
   }
 
-  getCarsFromDB() async {
-    List<Favorite> carsFavorites = await findAll();
+  Future<List<Car>> getCarsFavoriteFromDB() async {
+    List<Car> carsFromDB = await CarDAO()
+        .query('select * from carro c, favorito f where c.id = f.id');
 
-    List<Car> carsFromDB;
-
-    carsFromDB = carsFavorites.map((favorite) => );
-  
+    return carsFromDB;
   }
 }

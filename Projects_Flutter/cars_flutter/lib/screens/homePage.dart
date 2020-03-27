@@ -2,6 +2,7 @@ import 'package:cars_flutter/utils/Api.dart';
 import 'package:cars_flutter/utils/Prefs.dart';
 import 'package:cars_flutter/widgets/Drawer/DrawerDefault.dart';
 import 'package:cars_flutter/widgets/List/ListCars.dart';
+import 'package:cars_flutter/widgets/TabBar/FavoriteTab.dart';
 import 'package:flutter/material.dart';
 import '../widgets/TabBar/CarTab.dart';
 
@@ -26,7 +27,7 @@ class _HomePageState extends State<HomePage>
     int lastIndex = await Prefs.getInt('tabIndex');
 
     //Após ter o index, cria a TabController, pois ela era nula
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
 
     setState(() {//Manda atualizar a tela e coloca qual indice deve iniciar
       _tabController.index = lastIndex;//ESTÁ LINHA N PRECISA ESTAR AQUI, PODE ESTAR ANTES DO SETSTATE, POIS O SETSTATE SÓ FAZ A TELA DESENHAR NOVAMENTE
@@ -56,6 +57,9 @@ class _HomePageState extends State<HomePage>
                   ),
                   Tab(
                     text: "Luxo",
+                  ),
+                  Tab(
+                    text: "Favoritos",
                   )
                 ],
               ),
@@ -70,6 +74,7 @@ class _HomePageState extends State<HomePage>
                 CarTab(TypeCar.classics),
                 CarTab(TypeCar.sporting),
                 CarTab(TypeCar.lux),
+                FavoriteTab(),
               ],
             ),
       drawer: DrawerDefault(),
