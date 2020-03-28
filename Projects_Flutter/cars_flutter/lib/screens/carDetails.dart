@@ -2,6 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cars_flutter/Service/FavoriteService.dart';
 import 'package:cars_flutter/models/Cars.dart';
 import 'package:cars_flutter/models/LoremBloc.dart';
+import 'package:cars_flutter/screens/addCar.dart';
+import 'package:cars_flutter/utils/Helper.dart';
 import 'package:flutter/material.dart';
 
 class CarDetails extends StatefulWidget {
@@ -38,7 +40,7 @@ class _CarDetailsState extends State<CarDetails> {
   }
 
   onSelectedItemPopupMenu(String valueSelected) {
-    if (valueSelected == 'Editar') print('Editar');
+    if (valueSelected == 'Editar') Helper.pushNavigator(context, AddCar(carro: widget.car));
     if (valueSelected == 'Deletar') print('Deletar');
     if (valueSelected == 'Share') print('Share');
   }
@@ -46,10 +48,7 @@ class _CarDetailsState extends State<CarDetails> {
   clickOnFavorite() async {
     FavoriteService favoriteService = new FavoriteService();
 
-    print("enter2");
     bool save = await favoriteService.favoriteCar(context, widget.car);
-
-    print("enter1");
 
     setCarIsFavorite(save);
   }

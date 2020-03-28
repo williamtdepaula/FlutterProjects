@@ -1,4 +1,6 @@
+import 'package:cars_flutter/screens/addCar.dart';
 import 'package:cars_flutter/utils/Api.dart';
+import 'package:cars_flutter/utils/Helper.dart';
 import 'package:cars_flutter/utils/Prefs.dart';
 import 'package:cars_flutter/widgets/Drawer/DrawerDefault.dart';
 import 'package:cars_flutter/widgets/List/ListCars.dart';
@@ -29,8 +31,10 @@ class _HomePageState extends State<HomePage>
     //Após ter o index, cria a TabController, pois ela era nula
     _tabController = TabController(length: 4, vsync: this);
 
-    setState(() {//Manda atualizar a tela e coloca qual indice deve iniciar
-      _tabController.index = lastIndex;//ESTÁ LINHA N PRECISA ESTAR AQUI, PODE ESTAR ANTES DO SETSTATE, POIS O SETSTATE SÓ FAZ A TELA DESENHAR NOVAMENTE
+    setState(() {
+      //Manda atualizar a tela e coloca qual indice deve iniciar
+      _tabController.index =
+          lastIndex; //ESTÁ LINHA N PRECISA ESTAR AQUI, PODE ESTAR ANTES DO SETSTATE, POIS O SETSTATE SÓ FAZ A TELA DESENHAR NOVAMENTE
     });
 
     _tabController.addListener(() {
@@ -50,15 +54,19 @@ class _HomePageState extends State<HomePage>
                 controller: _tabController,
                 tabs: [
                   Tab(
+                    icon: Icon(Icons.directions_car),
                     text: "Clássicos",
                   ),
                   Tab(
+                    icon: Icon(Icons.directions_car),
                     text: "Esportivos",
                   ),
                   Tab(
+                    icon: Icon(Icons.directions_car),
                     text: "Luxo",
                   ),
                   Tab(
+                    icon: Icon(Icons.favorite),
                     text: "Favoritos",
                   )
                 ],
@@ -78,6 +86,9 @@ class _HomePageState extends State<HomePage>
               ],
             ),
       drawer: DrawerDefault(),
+      floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () => Helper.pushNavigator(context, AddCar())),
     );
   }
 }
