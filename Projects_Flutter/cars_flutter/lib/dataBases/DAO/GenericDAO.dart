@@ -15,9 +15,8 @@ abstract class GenericDAO<T extends Entity> {
 
   Future<int> save(T entity) async {
     var dbClient = await db;
-    var id = await dbClient.insert(nameTable, entity.toJson(),
+    var id = await dbClient.insert(nameTable, entity.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace);
-    print('id: $id');
     return id;
   }
 

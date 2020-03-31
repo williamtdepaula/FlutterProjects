@@ -1,4 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cars_flutter/models/ApiResponse.dart';
+import 'package:cars_flutter/models/EventBus.dart';
+import 'package:cars_flutter/utils/Api.dart';
+import 'package:cars_flutter/utils/Helper.dart';
 import '../models/Cars.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -216,7 +220,7 @@ class _AddCarState extends State<AddCar> {
     c.descricao = tDesc.text;
     c.tipo = _getTipo();
 
-    print("Car: $c");
+    print("Carro: $c");
 
     setState(() {
       _showProgress = true;
@@ -224,7 +228,19 @@ class _AddCarState extends State<AddCar> {
 
     print("Salvar o carro $c");
 
-    await Future.delayed(Duration(seconds: 3));
+    ApiResponse<bool> response = await Api.save(c);
+
+    if(response.ok) {
+      EventBus eventBus = EventBus.get(context);
+      
+
+      Helper.alert(context, title: "Carro salvo com sucesso", callback: (){
+      eventBus.sendEvent(CarEvent('save_car', c.tipo));
+       Helper.popNavigator(context);
+      });
+    } else {
+      Helper.alert(context, title: response.msg);
+    }
 
     setState(() {
       _showProgress = false;

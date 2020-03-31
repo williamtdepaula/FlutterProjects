@@ -1,6 +1,19 @@
-import 'package:cars_flutter/models/Entity.dart';
+import 'dart:convert';
 
-class Car extends Entity{
+import 'package:cars_flutter/models/Entity.dart';
+import 'package:cars_flutter/models/EventBus.dart';
+
+class CarEvent extends Event {
+  //Salvar, deletar
+  String action;
+
+  //Clássicos, luxo, esportivos
+  String type;
+
+  CarEvent(this.action, this.type);
+}
+
+class Car extends Entity {
   int id;
   String nome;
   String tipo;
@@ -21,7 +34,7 @@ class Car extends Entity{
     this.longitude,
   });
 
-  Car.fromJson(Map<String, dynamic> json) {
+  Car.fromMap(Map<String, dynamic> json) {
     id = json['id'];
     nome = json['nome'];
     tipo = json['tipo'];
@@ -33,7 +46,7 @@ class Car extends Entity{
   }
 
   @override
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toMap() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
     data['nome'] = this.nome;
@@ -44,5 +57,10 @@ class Car extends Entity{
     data['latitude'] = this.latitude;
     data['longitude'] = this.longitude;
     return data;
+  }
+
+  String toJson() {
+    String json = jsonEncode(toMap());
+    return json;
   }
 }

@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:cars_flutter/models/ApiResponse.dart';
 import 'package:cars_flutter/models/Cars.dart';
 import 'package:http/http.dart' as http;
-import '../dataBases/Car/CarDAO.dart';
 
 import '../models/User.dart';
 
@@ -67,7 +66,7 @@ class Api {
     List responseBody = json.decode(response.body);
 
     List<Car> carsResponse =
-        responseBody.map((car) => Car.fromJson(car)).toList();
+        responseBody.map((car) => Car.fromMap(car)).toList();
 
     return carsResponse;
   }
@@ -82,5 +81,40 @@ class Api {
     text = text.replaceAll('</p>', "");
 
     return text;
+  }
+
+  static Future<ApiResponse<bool>> save(Car c) async {
+    User user = await User.getUserFromPreferences();
+
+    Map<String, String> headers = {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer ${user.token}"
+    };
+
+    var url = 'https://carros-springboot.herokuapp.com/api/v2/carros';
+
+    print("POST > $url");
+
+    String json = c.toJson();
+
+    print("   JSON > $json");
+
+    var response = await http.post(url, body: json, headers: headers);
+
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
+
+    if (response.statusCode == 201) {
+      Map mapResponse = jsonDecode(response.body);
+
+      Car carro = Car.fromMap(mapResponse);
+
+      print("Novo carro: ${carro.id}");
+
+      return ApiResponse.ok(true);
+    }
+
+    Map mapResponse = jsonDecode(response.body);
+    return ApiResponse.error(mapResponse["error"]);
   }
 }

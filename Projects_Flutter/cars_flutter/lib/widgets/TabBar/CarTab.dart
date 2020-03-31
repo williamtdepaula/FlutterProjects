@@ -4,6 +4,7 @@ import 'package:cars_flutter/models/CarsBloc.dart';
 import 'package:flutter/material.dart';
 import '../../models/Cars.dart';
 import '../List/ListCars.dart';
+import '../../models/EventBus.dart';
 
 class CarTab extends StatefulWidget {
   String typeCar;
@@ -19,6 +20,8 @@ class _CarTabState extends State<CarTab>
   CarsBloc _carsBloc =
       CarsBloc(); //Coloca CarsBloc(), para não iniciar com null
 
+  StreamSubscription<Event> subscription; //Serve para cancelar o EventBus
+
   @override
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
@@ -26,7 +29,19 @@ class _CarTabState extends State<CarTab>
   @override
   void initState() {
     super.initState();
+
     _carsBloc.getCars(widget.typeCar);
+
+    final bus = EventBus.get(context);
+
+    //Fica ouvindo algo nessa Stream
+    subscription = bus.stream.listen((Event e) {
+      CarEvent carEvent = e;
+
+      if (carEvent.type == widget.typeCar) {
+        _carsBloc.getCars(widget.typeCar);
+      }
+    });
   }
 
   @override
@@ -83,7 +98,7 @@ class _CarTabState extends State<CarTab>
     );
   }
 
-  Future<void> _onRefresh(){
+  Future<void> _onRefresh() {
     return _carsBloc.getCars(widget.typeCar);
   }
 
@@ -92,5 +107,6 @@ class _CarTabState extends State<CarTab>
     // TODO: implement dispose
     super.dispose();
     _carsBloc.clearStream();
+    subscription.cancel();
   }
 }

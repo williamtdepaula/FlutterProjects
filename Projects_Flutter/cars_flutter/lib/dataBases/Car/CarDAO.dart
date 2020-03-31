@@ -13,7 +13,7 @@ class CarDAO extends GenericDAO<Car> {
 
   @override
   Car fromJson(Map<String, dynamic> map){
-    return Car.fromJson(map);
+    return Car.fromMap(map);
   }
   
   Future<List<Car>> findAllByTipo(String tipo) async {

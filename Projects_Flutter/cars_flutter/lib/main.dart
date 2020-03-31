@@ -1,3 +1,4 @@
+import 'package:cars_flutter/models/EventBus.dart';
 import 'package:cars_flutter/models/FavoriteBloc.dart';
 import 'package:cars_flutter/models/FavoriteModel.dart';
 import 'package:cars_flutter/screens/loadPage.dart';
@@ -12,8 +13,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        Provider(
+          create: (context) => new EventBus(),
+          dispose: (context, bus) => bus.dispose(),
+        ),
         //COM MODEL //USA ChangeNotifierProvider para ficar ouvindo
-        ChangeNotifierProvider<FavoriteModel>(
+        ChangeNotifierProvider<FavoriteModel>(//Quando fica ouvindo algo
           create: (context) => new FavoriteModel(),
         ),
         //COM BLOC
