@@ -1,4 +1,5 @@
 import 'package:apptalk_prototype/src/models/Feed.dart';
+import 'package:apptalk_prototype/src/widgets/react/react.dart';
 import 'package:apptalk_prototype/src/widgets/read_more/index.dart';
 import 'package:flutter/material.dart';
 
@@ -32,8 +33,10 @@ class _ItemHomeList extends State<ItemHomeList> {
           handleRenderTitle(),
           handleRenderDesc(),
           handleRenderContent(),
+          handleRenderActionsFeed()
         ],
       ),
+      //Reactions()
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
@@ -115,6 +118,16 @@ class _ItemHomeList extends State<ItemHomeList> {
           ),
         ],
       ),
+    );
+  }
+
+  handleRenderActionsFeed() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        React(),
+        Text('Comentar'),
+      ],
     );
   }
 }
