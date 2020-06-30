@@ -28,6 +28,24 @@ class _HomeScreen extends State<HomeScreen> {
         )
       ],
     ),
+    Feed(
+      'https://media-exp1.licdn.com/dms/image/C4E03AQH7i3XV45KPOg/profile-displayphoto-shrink_200_200/0?e=1596067200&v=beta&t=6rrkuDOGtf_31l2ZZRT05qyGr6W9RLoYxTcUs6Wmerg',
+      'William Tristão de Paula',
+      'Há 5 dias',
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+      [
+        Content(
+          'https://www.travelanddestinations.com/wp-content/uploads/2019/10/Ban-Gioc-Detian-Waterfalls-Vietnam-1.jpg',
+          true,
+          1.52963671128,
+        ),
+        Content(
+          'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/most-beautiful-places-in-the-world-gettyimages-1042549972.jpg',
+          true,
+          0.66691367173,
+        )
+      ],
+    ),
   ];
 
   @override

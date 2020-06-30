@@ -1,15 +1,41 @@
+import 'dart:async';
+
+import 'package:apptalk_prototype/src/models/Bloc/PositionFingerBloc.dart';
+import 'package:apptalk_prototype/src/models/FingerPosition.dart';
 import 'package:flutter/material.dart';
 
-class React extends StatelessWidget {
-  /*Function onPress;
-  Function onLongPress;
+class React extends StatefulWidget {
+  @override
+  _React createState() => _React();
+}
 
-  React(this.onPress, this.onLongPress);*/
+class _React extends State<React> {
+  PositionFingerBloc positionFingerBloc = PositionFingerBloc();
 
-  onPress(context) {
+  StreamSubscription<FingerPosition> subscription;
+
+  @override
+  void initState() {
+    super.initState();
+
+    subscription = positionFingerBloc.stream.listen((event) {
+      final finger = event.toString();
+      print('mudei $finger');
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    positionFingerBloc.dispose();
+    subscription.cancel();
+  }
+
+  onPress() {
     OverlayState overlayState = Overlay.of(context);
     OverlayEntry overlayEntry = OverlayEntry(
-      builder: (context) => Container(child: renderContainerToGesture(context)),
+      builder: (context) => Container(child: renderContainerToGesture()),
     );
 
     overlayState.insert(overlayEntry);
@@ -19,8 +45,10 @@ class React extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.all(10),
-      child: InkWell(
-        onLongPress: () => onPress(context),
+      child: GestureDetector(
+        onHorizontalDragStart: (e) => onPress(),
+        onHorizontalDragUpdate: (e) => positionFingerBloc.setPositionFinger(
+            e.globalPosition.dx, e.globalPosition.dy, e.localPosition.dy),
         child: Text(
           'Curtir',
           style: TextStyle(
@@ -32,17 +60,47 @@ class React extends StatelessWidget {
     );
   }
 
-  renderContainerToGesture(context) {
-    final sizeDevice = MediaQuery.of(context).size;
+  renderContainerToGesture() {
+    return StreamBuilder(
+        stream: positionFingerBloc.stream,
+        builder: (BuildContext context, snapshot) {
+          if (snapshot.hasData) {
+            FingerPosition pointer = snapshot.data;
 
-    return GestureDetector(
-      onHorizontalDragStart: (e) => print(e),
-      onHorizontalDragUpdate: (e) => print(e),
-      child: Container(
-        width: sizeDevice.width,
-        height: sizeDevice.height / 7,
-        color: Colors.green,
+            print('POSITION START ${pointer.positionStart}');
+
+            return Positioned(
+              height: 100,
+              width: 200,
+              top: 350,
+              left: 20,
+              child: renderReactContainer(),
+            );
+          }
+          return Container();
+        });
+  }
+
+  renderReactContainer() {
+    RenderBox renderBox = context.findRenderObject();
+
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white70,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          renderReact(),
+          renderReact(),
+          renderReact(),
+          renderReact(),
+        ],
       ),
     );
+  }
+
+  renderReact() {
+    return Image.asset('assets/imgs/likePNG.png', width: 38);
   }
 }
