@@ -125,7 +125,7 @@ class _ItemHomeList extends State<ItemHomeList> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        React(),
+        React([1, 2, 3]),
         Text('Comentar'),
       ],
     );

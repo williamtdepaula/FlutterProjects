@@ -6,8 +6,8 @@ class PositionFingerBloc {
 
   Stream get stream => _streamController.stream;
 
-  setPositionFinger(positionX, positionY, positionStart){
-    FingerPosition fingerPosition = FingerPosition(positionX, positionY, positionStart);
+  setPositionFinger(positionX, positionY){
+    FingerPosition fingerPosition = FingerPosition(positionX, positionY);
     _streamController.add(fingerPosition);
   }
 
