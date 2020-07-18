@@ -1,5 +1,5 @@
+import 'package:bmi_calculator/utils/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MaleOrFemaleCard extends StatelessWidget {
   final IconData iconName;
@@ -16,14 +16,14 @@ class MaleOrFemaleCard extends StatelessWidget {
           child: Icon(
             this.iconName,
             size: 70,
-            color: Color(0xFF8D8E98),
+            color: kColorText,
           ),
         ),
         Expanded(
           flex: 1,
           child: Text(
             this.text,
-            style: TextStyle(fontSize: 20, color: Color(0xFF8D8E98)),
+            style: kLabelTextStyle,
           ),
         ),
       ],

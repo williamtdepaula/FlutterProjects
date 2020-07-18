@@ -1,11 +1,11 @@
 import 'package:bmi_calculator/models/Gender.dart';
+import 'package:bmi_calculator/utils/constants.dart';
+import 'package:bmi_calculator/widget/height_card.dart';
 import 'package:bmi_calculator/widget/male_or_famale_card.dart';
-import 'package:bmi_calculator/widget/reusableCard.dart';
+import 'package:bmi_calculator/widget/more_less_card.dart';
+import 'package:bmi_calculator/widget/reusable_card.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
-const inactiveCardColor = Color(0xFF111328);
-const activeCardColor = Color(0xFF1D1E33);
 
 class Home extends StatefulWidget {
   @override
@@ -14,6 +14,9 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   Gender genderSelected;
+  int height;
+  int weight;
+  int age;
 
   @override
   void initState() {
@@ -30,31 +33,37 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(child: Text('Hello')),
+        title: Center(child: Text('BMI CALCULATOR')),
       ),
       body: _handlerRenderBody(),
     );
   }
 
-  _handlerRenderBody() {
+  Column _handlerRenderBody() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
         Expanded(child: _handleRenderFirstRow()),
-        ReusableCard(),
+        ReusableCard(
+          onTapCard: () => null,
+          childCard: HeightCard(
+            onEndSlide: (heightSelected) => height = heightSelected.toInt(),
+          ),
+        ),
         Expanded(child: _handleRenderSecondRow()),
         _handlerRenderButton(),
       ],
     );
   }
 
-  _handleRenderFirstRow() {
+  Row _handleRenderFirstRow() {
     return Row(
       children: <Widget>[
         ReusableCard(
           onTapCard: () => onTapInGenderCard(Gender.male),
           colorOfCard: genderSelected == Gender.male
-              ? activeCardColor
-              : inactiveCardColor,
+              ? kActiveCardColor
+              : kInactiveCardColor,
           childCard: MaleOrFemaleCard(
             iconName: FontAwesomeIcons.mars,
             text: 'MALE',
@@ -63,8 +72,8 @@ class _HomeState extends State<Home> {
         ReusableCard(
           onTapCard: () => onTapInGenderCard(Gender.female),
           colorOfCard: genderSelected == Gender.female
-              ? activeCardColor
-              : inactiveCardColor,
+              ? kActiveCardColor
+              : kInactiveCardColor,
           childCard: MaleOrFemaleCard(
             iconName: FontAwesomeIcons.venus,
             text: 'FEMALE',
@@ -74,17 +83,31 @@ class _HomeState extends State<Home> {
     );
   }
 
-  _handleRenderSecondRow() {
+  Row _handleRenderSecondRow() {
     return Row(
-      children: <Widget>[ReusableCard(), ReusableCard()],
+      children: <Widget>[
+        ReusableCard(
+          childCard: MoreLessCard(
+            title: 'WEIGHT',
+            onValueChanged: (int value) => weight = value,
+          ),
+        ),
+        ReusableCard(
+          childCard: MoreLessCard(
+            title: 'AGE',
+            onValueChanged: (int value) => age = value,
+          ),
+        ),
+      ],
     );
   }
 
-  _handlerRenderButton() {
+  Container _handlerRenderButton() {
     return Container(
-        color: Color(0xFFEB1555),
-        margin: EdgeInsets.only(top: 10),
-        width: double.infinity,
-        height: 80);
+      color: Color(0xFFEB1555),
+      margin: EdgeInsets.only(top: 10),
+      width: double.infinity,
+      height: 80,
+    );
   }
 }
