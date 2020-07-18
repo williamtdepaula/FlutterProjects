@@ -1,5 +1,6 @@
 import 'package:bmi_calculator/models/Gender.dart';
 import 'package:bmi_calculator/utils/constants.dart';
+import 'package:bmi_calculator/widget/LargeButton.dart';
 import 'package:bmi_calculator/widget/height_card.dart';
 import 'package:bmi_calculator/widget/male_or_famale_card.dart';
 import 'package:bmi_calculator/widget/more_less_card.dart';
@@ -102,12 +103,10 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Container _handlerRenderButton() {
-    return Container(
-      color: Color(0xFFEB1555),
-      margin: EdgeInsets.only(top: 10),
-      width: double.infinity,
-      height: 80,
+  LargeButton _handlerRenderButton() {
+    return LargeButton(
+      text: 'CALCULATE',
+      onTap: () => Navigator.pushNamed(context, '/result'),
     );
   }
 }
