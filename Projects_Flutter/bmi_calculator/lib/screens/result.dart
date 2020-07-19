@@ -3,6 +3,12 @@ import 'package:bmi_calculator/widget/reusable_card.dart';
 import 'package:flutter/material.dart';
 
 class Result extends StatefulWidget {
+  String status;
+  String interpretation;
+  String result;
+
+  Result({this.status, this.interpretation, this.result});
+
   @override
   _ResultState createState() => _ResultState();
 }
@@ -17,6 +23,10 @@ class _ResultState extends State<Result> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('BMI CALCULATOR'),
+        centerTitle: true,
+      ),
       body: _rendlerRenderBody(),
     );
   }
@@ -35,12 +45,15 @@ class _ResultState extends State<Result> {
     );
   }
 
-  Text _rendlerRenderTitle() {
-    return Text(
-      'Your result',
-      style: TextStyle(
-        fontWeight: FontWeight.w900,
-        fontSize: 50,
+  Padding _rendlerRenderTitle() {
+    return Padding(
+      padding: EdgeInsets.only(left: 10),
+      child: Text(
+        'Your result',
+        style: TextStyle(
+          fontWeight: FontWeight.w900,
+          fontSize: 50,
+        ),
       ),
     );
   }
@@ -49,38 +62,31 @@ class _ResultState extends State<Result> {
     return ReusableCard(
       childCard: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Text(
-            'NORMAL',
+            widget.status,
             style: TextStyle(
               color: Colors.green,
               fontWeight: FontWeight.w900,
               fontSize: 20,
             ),
           ),
-          SizedBox(
-            height: 120,
-          ),
           Text(
-            '22.1',
+            widget.result,
             style: TextStyle(
               fontSize: 80,
               fontWeight: FontWeight.w900,
             ),
           ),
-          SizedBox(
-            height: 120,
-          ),
-          //Text('Normal BMI range'),
-          //Text('18,5 - 25/kg m2'),
           Text(
-            'You have a normal body wight, Good job!',
+            widget.interpretation,
+            textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 20,
+              
             ),
           ),
-          //Text('Save Result')
         ],
       ),
     );
@@ -88,8 +94,8 @@ class _ResultState extends State<Result> {
 
   LargeButton _rendlerRenderButton() {
     return LargeButton(
-      onTap: () => null,
-      text: 'CALCULATE AGAIN',
+      onTap: () => Navigator.pop(context),
+      text: 'RE-CALCULATE',
     );
   }
 }

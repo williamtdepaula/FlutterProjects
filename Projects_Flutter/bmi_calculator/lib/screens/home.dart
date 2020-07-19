@@ -1,4 +1,6 @@
+import 'package:bmi_calculator/models/Calculate_brain.dart';
 import 'package:bmi_calculator/models/Gender.dart';
+import 'package:bmi_calculator/screens/result.dart';
 import 'package:bmi_calculator/utils/constants.dart';
 import 'package:bmi_calculator/widget/LargeButton.dart';
 import 'package:bmi_calculator/widget/height_card.dart';
@@ -15,8 +17,8 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   Gender genderSelected;
-  int height;
-  int weight;
+  int height = 120;
+  int weight = 60;
   int age;
 
   @override
@@ -24,10 +26,36 @@ class _HomeState extends State<Home> {
     super.initState();
   }
 
-  onTapInGenderCard(Gender gender) {
+  void onTapInGenderCard(Gender gender) {
     setState(() {
       genderSelected = gender;
     });
+  }
+
+  void pressToCalc() {
+    CalculateBrain calculateBrain =
+        new CalculateBrain(height: this.height, weight: this.weight);
+
+    final String result = calculateBrain.calculateBMI();
+    final String status = calculateBrain.getMessage;
+    final String interpretation = calculateBrain.getInterpretation;
+
+    print(result);
+    print(status);
+    print(status);
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => Result(
+          interpretation: interpretation,
+          result: result,
+          status: status,
+        ),
+      ),
+    );
+
+    //Navigator.pushNamed(context, '/result', arguments: Result());
   }
 
   @override
@@ -106,7 +134,7 @@ class _HomeState extends State<Home> {
   LargeButton _handlerRenderButton() {
     return LargeButton(
       text: 'CALCULATE',
-      onTap: () => Navigator.pushNamed(context, '/result'),
+      onTap: pressToCalc,
     );
   }
 }
