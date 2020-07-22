@@ -40,10 +40,6 @@ class _HomeState extends State<Home> {
     final String status = calculateBrain.getMessage;
     final String interpretation = calculateBrain.getInterpretation;
 
-    print(result);
-    print(status);
-    print(status);
-
     Navigator.push(
       context,
       MaterialPageRoute(

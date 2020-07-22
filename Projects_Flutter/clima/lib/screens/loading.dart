@@ -1,5 +1,12 @@
+import 'dart:convert';
+
+import 'package:clima/common.dart';
+import 'package:clima/models/Location.dart';
+import 'package:clima/models/Weather.dart';
+import 'package:clima/services/Network.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:http/http.dart';
 
 class Loading extends StatefulWidget {
   @override
@@ -10,13 +17,18 @@ class _LoadingState extends State<Loading> {
   @override
   void initState() {
     super.initState();
+
+    getLocation();
   }
 
   void getLocation() async {
-    Position position = await Geolocator()
-        .getCurrentPosition(desiredAccuracy: LocationAccuracy.low);
+    Location location = new Location();
 
-    print(position);
+    await location.getLocation();
+
+    Weather weather = await Network().getWeather(location.latitude, location.longitude);
+
+    print('${weather.temp.toString()} ${weather.weatherID.toString()} ${weather.cityName.toString()}');
   }
 
   @override
@@ -27,11 +39,6 @@ class _LoadingState extends State<Loading> {
   }
 
   Center _rendlerRenderBody() {
-    return Center(
-      child: RaisedButton(
-        onPressed: getLocation,
-        child: Text('GET LOCATION'),
-      ),
-    );
+    return Center();
   }
 }

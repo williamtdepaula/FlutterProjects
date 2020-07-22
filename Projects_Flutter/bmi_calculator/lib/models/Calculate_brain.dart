@@ -15,13 +15,12 @@ class CalculateBrain {
   String calculateBMI() {
     _bmi = this.weight / pow((this.height / 100), 2);
 
-    identifyImplement();
+    _identifyImplement();
 
     return _bmi.toStringAsFixed(1);
   }
 
-  void identifyImplement() {
-    print("BMI $_bmi");
+  void _identifyImplement() {
     if (_bmi >= 25) {
       this._messages['Overweight'] =
           'You have a higher body than normal body weight. Try to exercise more.';
