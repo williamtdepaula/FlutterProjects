@@ -4,4 +4,6 @@ class Weather {
   double temp;
 
   Weather({this.weatherID, this.cityName, this.temp});
+
+  get getTempInCelsius  => '${(this.temp.toInt())}º';
 }
