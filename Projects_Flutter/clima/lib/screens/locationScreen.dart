@@ -1,10 +1,9 @@
-import 'package:clima/models/Location.dart';
+import 'package:clima/components/list/weather_detail.dart';
+import 'package:clima/components/loading.dart';
 import 'package:clima/models/LocationScreenBloc.dart';
 import 'package:clima/models/Weather.dart';
 import 'package:clima/utils/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:keyboard_visibility/keyboard_visibility.dart';
 
 class LocationScreen extends StatefulWidget {
@@ -21,23 +20,19 @@ class _LocationScreenState extends State<LocationScreen> {
   bool showInput = false;
   Weather weather;
   String city;
-
-  @override
-  void initState() {
-    super.initState();
-
-    onLoad();
-  }
+  List<Weather> weathers;
 
   void onLoad() async {
     weather = await _locationScreenBloc.getWeatherByLatAndLong();
+
+    await getWeatherDetails();
 
     setState(() {
       loading = false;
     });
   }
 
-  void onPressFindButtom() {
+  void onPressFindButtom() async {
     if (!showInput) {
       setState(() {
         showInput = true;
@@ -45,32 +40,57 @@ class _LocationScreenState extends State<LocationScreen> {
 
       inputFocusNode.requestFocus();
 
-      KeyboardVisibilityNotification().addNewListener(onChange: (focus) {
-        setVisibilityInput(show: focus);
-      });
-
-      inputFocusNode.addListener(() {
-        setVisibilityInput(show: inputFocusNode.hasFocus);
-      });
-    } else getCityWeather(city);
+      initListeners();
+    } else {
+      await getCityWeather(city);
+    }
   }
 
-  void getCityWeather(String city) async {
-    setState(() {
-      loading = true;
+  void initListeners() {
+    KeyboardVisibilityNotification().addNewListener(onChange: (focus) {
+      setVisibilityInput(show: focus);
     });
 
-    weather = await LocationScreenBloc().getWeatherByCityName(city);
+    inputFocusNode.addListener(() {
+      setVisibilityInput(show: inputFocusNode.hasFocus);
+    });
+  }
+
+  Future<void> getWeatherDetails() async {
+    weathers = await _locationScreenBloc.getDailyDetails();
 
     setState(() {
-      loading = false;
+      weathers = weathers;
     });
+  }
+
+  Future<void> getCityWeather(String city) async {
+    if (city.length > 0) {
+      setState(() {
+        loading = true;
+      });
+
+      weather = await _locationScreenBloc.getWeatherByCityName(city);
+
+      await getWeatherDetails();
+
+      setState(() {
+        loading = false;
+      });
+    }
   }
 
   void setVisibilityInput({show = false}) {
     setState(() {
       showInput = show;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    onLoad();
   }
 
   @override
@@ -93,13 +113,9 @@ class _LocationScreenState extends State<LocationScreen> {
                   ],
                 ),
                 _handlerRenderFindButtom(),
-                showInput ? _handlerRenderInput() : Container(),
               ],
             )
-          : SpinKitDoubleBounce(
-              color: Colors.blue,
-              size: 100.0,
-            ),
+          : Loading(),
     );
   }
 
@@ -125,6 +141,7 @@ class _LocationScreenState extends State<LocationScreen> {
               fontWeight: FontWeight.w900,
             ),
           ),
+          showInput ? _handlerRenderInput() : Container(),
         ],
       ),
     );
@@ -134,10 +151,18 @@ class _LocationScreenState extends State<LocationScreen> {
     return Expanded(
       child: Container(
         alignment: Alignment.center,
+        padding: EdgeInsets.only(top: 50),
         decoration: BoxDecoration(
           color: Color(0xFFededed),
         ),
-        child: Text("Está uma boa temperatura!"),
+        child: ListView.builder(
+          itemCount: weathers.length,
+          itemBuilder: (BuildContext context, index) {
+            return WeatherDetail(
+              weather: weathers[index],
+            );
+          },
+        ),
       ),
     );
   }
@@ -157,23 +182,18 @@ class _LocationScreenState extends State<LocationScreen> {
     );
   }
 
-  Positioned _handlerRenderInput() {
-    return Positioned(
-      top: MediaQuery.of(context).size.height / 3,
-      child: SingleChildScrollView(
-        child: Container(
-          width: MediaQuery.of(context).size.width,
-          padding: EdgeInsets.symmetric(horizontal: 20),
-          child: TextFormField(
-            focusNode: inputFocusNode,
-            onFieldSubmitted: getCityWeather,
-            onChanged: (value) => city = value,
-            decoration: InputDecoration(
-              filled: true,
-              fillColor: Colors.white,
-              border: OutlineInputBorder(),
-            ),
-          ),
+  Container _handlerRenderInput() {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      padding: EdgeInsets.symmetric(horizontal: 20),
+      child: TextFormField(
+        focusNode: inputFocusNode,
+        onFieldSubmitted: getCityWeather,
+        onChanged: (value) => city = value,
+        decoration: InputDecoration(
+          filled: true,
+          fillColor: Colors.white,
+          border: OutlineInputBorder(),
         ),
       ),
     );
