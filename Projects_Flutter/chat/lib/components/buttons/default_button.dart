@@ -26,6 +26,7 @@ class DefaultButton extends StatelessWidget {
         onPressed: onPress,
         fillColor: buttonColor,
         elevation: elevation,
+        highlightElevation: elevation,
         child: Text(
           text,
           style: TextStyle(

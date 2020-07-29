@@ -26,7 +26,7 @@ class _LoginScreenState extends State<LoginScreen> {
       child: Center(
         child: Column(
           children: <Widget>[
-            Expanded(child: Logo()),
+            Expanded(child: Hero(tag: 'logo',  child: Logo())),
             Expanded(
               child: _handlerRenderForm(),
             ),

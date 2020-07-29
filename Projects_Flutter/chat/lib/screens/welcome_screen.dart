@@ -11,7 +11,36 @@ class WelcomeScreen extends StatefulWidget {
   _WelcomeScreenState createState() => _WelcomeScreenState();
 }
 
-class _WelcomeScreenState extends State<WelcomeScreen> {
+class _WelcomeScreenState extends State<WelcomeScreen>
+    with SingleTickerProviderStateMixin {
+  AnimationController animationController;
+  Animation animation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    animationController = new AnimationController(
+      vsync: this,
+      duration: Duration(seconds: 2),
+    );
+
+    animation = CurvedAnimation(parent: animationController, curve: Curves.elasticOut);
+
+    animationController.forward();
+
+    animationController.addListener(() {
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose(){
+    super.dispose();
+    
+    animationController.dispose();
+  }
+
   onPressSignIn() {
     Navigator.pushNamed(context, LoginScreen.id);
   }
@@ -35,14 +64,34 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Expanded(child: Logo()),
+            Expanded(child: _handlerRenderTitle()),
             Expanded(child: _handlerRenderButtons()),
           ],
         ),
       ),
     );
   }
-  
+
+  _handlerRenderTitle() {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Hero(
+          tag: 'logo',
+          child: Logo(
+            size: animation.value * 60,
+          ),
+        ),
+        Text(
+          'Flash Chat',
+          style: TextStyle(
+              color: Colors.green, fontSize: 45, fontWeight: FontWeight.w900),
+        ),
+      ],
+    );
+  }
+
   _handlerRenderButtons() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
