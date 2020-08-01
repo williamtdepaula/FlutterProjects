@@ -1,7 +1,9 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:chat/components/buttons/default_button.dart';
 import 'package:chat/components/image/logo.dart';
-import 'package:chat/screens/login_screen.dart';
-import 'package:chat/screens/registration_screen.dart';
+import 'package:chat/screens/login.page.dart';
+import 'package:chat/screens/registration.page.dart';
+import 'package:chat/utils/Helper.dart';
 import 'package:flutter/material.dart';
 
 class WelcomeScreen extends StatefulWidget {
@@ -25,7 +27,8 @@ class _WelcomeScreenState extends State<WelcomeScreen>
       duration: Duration(seconds: 2),
     );
 
-    animation = CurvedAnimation(parent: animationController, curve: Curves.elasticOut);
+    animation =
+        CurvedAnimation(parent: animationController, curve: Curves.elasticOut);
 
     animationController.forward();
 
@@ -35,9 +38,9 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   }
 
   @override
-  void dispose(){
+  void dispose() {
     super.dispose();
-    
+
     animationController.dispose();
   }
 
@@ -83,9 +86,16 @@ class _WelcomeScreenState extends State<WelcomeScreen>
             size: animation.value * 60,
           ),
         ),
-        Text(
-          'Flash Chat',
-          style: TextStyle(
+        ColorizeAnimatedTextKit(
+          text: [
+            'Flash Chat',
+            'Your Chat'
+          ],
+          colors: [
+            Colors.green,
+            Colors.blue,
+          ],
+          textStyle: TextStyle(
               color: Colors.green, fontSize: 45, fontWeight: FontWeight.w900),
         ),
       ],

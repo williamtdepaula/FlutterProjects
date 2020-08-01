@@ -1,18 +1,18 @@
-import 'package:chat/blocs/registration_bloc.dart';
+import 'package:chat/blocs/login.bloc.dart';
 import 'package:chat/components/buttons/default_button.dart';
 import 'package:chat/components/image/logo.dart';
 import 'package:chat/components/input/default_input.dart';
 import 'package:flutter/material.dart';
 
-class RegistrationScreen extends StatefulWidget {
-  static final String id = '/registration';
+class LoginScreen extends StatefulWidget {
+  static final String id = '/login';
 
   @override
-  _RegistrationScreenState createState() => _RegistrationScreenState();
+  _LoginScreenState createState() => _LoginScreenState();
 }
 
-class _RegistrationScreenState extends State<RegistrationScreen> {
-  RegistrationBloc _registrationBloc = new RegistrationBloc();
+class _LoginScreenState extends State<LoginScreen> {
+  LoginBloc _loginBloc = new LoginBloc();
 
   @override
   Widget build(BuildContext context) {
@@ -40,18 +40,23 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     return Column(
       children: <Widget>[
         DefaultInput(
-          controller: _registrationBloc.textEmailController,
+          controller: _loginBloc.textEmailController,
           label: 'E-mail',
         ),
         DefaultInput(
-          controller: _registrationBloc.textPasswordController,
+          controller: _loginBloc.textPasswordController,
           label: 'Senha',
           password: true,
         ),
-        DefaultButton(
-          onPress: _registrationBloc.register,
-          text: 'REGISTRAR-SE',
-        )
+        StreamBuilder(
+            stream: _loginBloc.stream,
+            builder: (BuildContext context, snapshot) {
+              return DefaultButton(
+                onPress: () => _loginBloc.login(context),
+                text: 'ENTRAR',
+                loadingState: snapshot.data,
+              );
+            }),
       ],
     );
   }

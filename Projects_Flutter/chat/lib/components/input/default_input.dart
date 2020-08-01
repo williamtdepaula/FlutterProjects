@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 
 class DefaultInput extends StatelessWidget {
   final TextEditingController controller;
+  final TextInputType type;
   final String label;
   final bool password;
 
-  DefaultInput({@required this.controller, this.label = '', this.password = false});
+  DefaultInput({@required this.controller, this.type = TextInputType.text, this.label = '', this.password = false});
 
   @override
   Widget build(BuildContext context) {
@@ -14,6 +15,7 @@ class DefaultInput extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
       child: TextFormField(
         controller: controller,
+        keyboardType: type,
         cursorColor: Colors.green,
         obscureText: password,
         decoration: InputDecoration(

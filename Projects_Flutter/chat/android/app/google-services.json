@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1028499991266",
+    "firebase_url": "https://chat-6a672.firebaseio.com",
+    "project_id": "chat-6a672",
+    "storage_bucket": "chat-6a672.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1028499991266:android:6e63faa65db0ffd4c00cbb",
+        "android_client_info": {
+          "package_name": "com.william.chat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1028499991266-eli4ccotuiggfv3n0pkbhfbr1ssf90dt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDp-giuTwOF2-FJw_8mErnbHpOt5pCQ0FY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1028499991266-eli4ccotuiggfv3n0pkbhfbr1ssf90dt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

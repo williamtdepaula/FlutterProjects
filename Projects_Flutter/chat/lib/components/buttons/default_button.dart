@@ -1,3 +1,4 @@
+import 'package:chat/models/loading.dart';
 import 'package:flutter/material.dart';
 
 class DefaultButton extends StatelessWidget {
@@ -6,6 +7,7 @@ class DefaultButton extends StatelessWidget {
   final Color buttonColor;
   final Color textColor;
   final double elevation;
+  LoadingState loadingState;
 
   DefaultButton({
     @required this.onPress,
@@ -13,6 +15,7 @@ class DefaultButton extends StatelessWidget {
     this.buttonColor = Colors.green,
     this.textColor = Colors.white,
     this.elevation = 3.0,
+    this.loadingState = LoadingState.notLoading,
   });
 
   @override
@@ -27,14 +30,23 @@ class DefaultButton extends StatelessWidget {
         fillColor: buttonColor,
         elevation: elevation,
         highlightElevation: elevation,
-        child: Text(
-          text,
-          style: TextStyle(
-            color: textColor,
-            fontSize: 16,
-            fontWeight: FontWeight.w900
-          ),
-        ),
+        child: loadingState == LoadingState.loading
+            ? Container(
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation(textColor),
+                  strokeWidth: 2,
+                ),
+              )
+            : Text(
+                text,
+                style: TextStyle(
+                  color: textColor,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
       ),
     );
   }
