@@ -1,0 +1,5 @@
+abstract class User{
+  String email;
+
+  User({this.email});
+} 

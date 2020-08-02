@@ -1,4 +1,5 @@
 import 'package:chat/blocs/chat.bloc.dart';
+import 'package:chat/components/bubble/bubble.dart';
 import 'package:chat/components/input/input_chat.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,13 @@ class _ChatScreenState extends State<ChatScreen> {
     super.initState();
 
     _chatBloc.listener();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _chatBloc.dispose();
   }
 
   @override
@@ -44,13 +52,32 @@ class _ChatScreenState extends State<ChatScreen> {
     return SafeArea(
       child: Column(
         children: <Widget>[
+          Expanded(child: _handleRenderChatContent()),
           _handlerRenderInput(),
         ],
       ),
     );
   }
 
+  _handleRenderChatContent() {
+    return StreamBuilder(
+        stream: _chatBloc.stream,
+        builder: (BuildContext context, snapshot) {
+          if (snapshot.hasData) {
+            return ListView.builder(
+              itemCount: snapshot.data.length,
+              itemBuilder: (BuildContext context, index) {
+                return Bubble(message: snapshot.data[index], );
+              },
+            );
+          }
+          return Container();
+        });
+  }
+
   _handlerRenderInput() {
-    return InputChat(onPress: (message) => _chatBloc.sendMessage(message),);
+    return InputChat(
+      onPress: (message) => _chatBloc.sendMessage(message),
+    );
   }
 }

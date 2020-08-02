@@ -45,11 +45,11 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   }
 
   onPressSignIn() {
-    Navigator.pushNamed(context, LoginScreen.id);
+    Navigator.pushReplacementNamed(context, LoginScreen.id);
   }
 
   onPressSignUp() {
-    Navigator.pushNamed(context, RegistrationScreen.id);
+    Navigator.pushReplacementNamed(context, RegistrationScreen.id);
   }
 
   @override

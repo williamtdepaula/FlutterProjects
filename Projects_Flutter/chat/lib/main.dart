@@ -1,4 +1,5 @@
 import 'package:chat/screens/chat.page.dart';
+import 'package:chat/screens/loading.page.dart';
 import 'package:chat/screens/login.page.dart';
 import 'package:chat/screens/registration.page.dart';
 import 'package:chat/screens/welcome.page.dart';
@@ -17,8 +18,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      initialRoute: WelcomeScreen.id,
+      initialRoute: LoadingScreen.id,
       routes: {
+        LoadingScreen.id: (context) => LoadingScreen(),
         WelcomeScreen.id: (context) => WelcomeScreen(),
         LoginScreen.id: (context) => LoginScreen(),
         RegistrationScreen.id: (context) => RegistrationScreen(),
