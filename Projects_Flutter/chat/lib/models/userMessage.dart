@@ -1,5 +1,7 @@
 import 'package:chat/models/user.dart';
 
 class UserMessage extends User{
-  UserMessage({String email}) : super(email: email);
+  String name;
+
+  UserMessage({String email, this.name}) : super(email: email);
 }

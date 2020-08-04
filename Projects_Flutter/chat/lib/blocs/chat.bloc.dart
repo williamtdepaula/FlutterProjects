@@ -2,6 +2,7 @@ import 'package:chat/components/bubble/bubble.dart';
 import 'package:chat/models/UserMessage.dart';
 import 'package:chat/models/message.dart';
 import 'package:chat/models/simpleStream.dart';
+import 'package:chat/screens/welcome.page.dart';
 import 'package:chat/utils/Prefs.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -11,6 +12,7 @@ class ChatBloc extends SimpleStream<List<Message>> {
   FirebaseAuth fireAuth = FirebaseAuth.instance;
   Firestore firestore = Firestore.instance;
   FirebaseUser userLogged;
+  ScrollController scrollController = new ScrollController();
 
   ChatBloc() {
     Future<FirebaseUser> user = fireAuth.currentUser();
@@ -23,23 +25,29 @@ class ChatBloc extends SimpleStream<List<Message>> {
 
     Prefs.setString('user', '');
 
-    Navigator.pop(context);
+    Navigator.pushReplacementNamed(context, WelcomeScreen.id);
   }
 
   sendMessage(message) async {
     await firestore.collection('messages').add({
       "text": message,
       "sender": userLogged.email,
+      "name": userLogged.displayName,
+      "createdAt": new DateTime.now().millisecondsSinceEpoch,
     });
   }
 
   listener() {
-    firestore.collection('messages').snapshots().listen((event) {
+    firestore
+        .collection('messages')
+        .orderBy('createdAt', descending: false)
+        .snapshots()
+        .listen((event) {
       List<Message> messages = [];
-      
+
       event.documents.forEach((changes) {
-        final UserMessage userMessage =
-            new UserMessage(email: changes.data['sender']);
+        final UserMessage userMessage = new UserMessage(
+            email: changes.data['sender'], name: changes.data['name']);
 
         Message message = new Message(
           text: changes.data['text'],
@@ -52,6 +60,8 @@ class ChatBloc extends SimpleStream<List<Message>> {
         messages.add(message);
 
         addToStream(messages);
+
+        scrollController.jumpTo(scrollController.position.maxScrollExtent);
       });
     });
   }

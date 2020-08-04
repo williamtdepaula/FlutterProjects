@@ -39,9 +39,8 @@ class _WelcomeScreenState extends State<WelcomeScreen>
 
   @override
   void dispose() {
-    super.dispose();
-
     animationController.dispose();
+    super.dispose();
   }
 
   onPressSignIn() {

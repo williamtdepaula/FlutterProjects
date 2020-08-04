@@ -24,6 +24,7 @@ class InputChat extends StatelessWidget {
           Expanded(
             flex: 6,
             child: TextFormField(
+              maxLines: null,
               controller: textEditingController,
               decoration: InputDecoration(
                 focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.green)),

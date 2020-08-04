@@ -1,6 +1,7 @@
 import 'package:chat/blocs/chat.bloc.dart';
 import 'package:chat/components/bubble/bubble.dart';
 import 'package:chat/components/input/input_chat.dart';
+import 'package:chat/models/keyboard_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -11,7 +12,7 @@ class ChatScreen extends StatefulWidget {
   _ChatScreenState createState() => _ChatScreenState();
 }
 
-class _ChatScreenState extends State<ChatScreen> {
+class _ChatScreenState extends State<ChatScreen> with ScreenWithKeyBoard {
   ChatBloc _chatBloc = new ChatBloc();
 
   @override
@@ -24,27 +25,30 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void dispose() {
     // TODO: implement dispose
-    super.dispose();
     _chatBloc.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Chat'),
-        backgroundColor: Colors.green,
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.close,
-              color: Colors.white,
+    return GestureDetector(
+      onTap: () => closeKeyBoardWhenClickOff(context),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('Chat'),
+          backgroundColor: Colors.green,
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(
+                Icons.close,
+                color: Colors.white,
+              ),
+              onPressed: () => _chatBloc.logout(context),
             ),
-            onPressed: () => _chatBloc.logout(context),
-          ),
-        ],
+          ],
+        ),
+        body: _handlerRenderBody(),
       ),
-      body: _handlerRenderBody(),
     );
   }
 
@@ -65,9 +69,12 @@ class _ChatScreenState extends State<ChatScreen> {
         builder: (BuildContext context, snapshot) {
           if (snapshot.hasData) {
             return ListView.builder(
+              controller: _chatBloc.scrollController,
               itemCount: snapshot.data.length,
               itemBuilder: (BuildContext context, index) {
-                return Bubble(message: snapshot.data[index], );
+                return Bubble(
+                  message: snapshot.data[index],
+                );
               },
             );
           }
