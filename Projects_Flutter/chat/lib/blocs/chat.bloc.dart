@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:chat/components/bubble/bubble.dart';
 import 'package:chat/models/UserMessage.dart';
 import 'package:chat/models/message.dart';
@@ -12,7 +14,6 @@ class ChatBloc extends SimpleStream<List<Message>> {
   FirebaseAuth fireAuth = FirebaseAuth.instance;
   Firestore firestore = Firestore.instance;
   FirebaseUser userLogged;
-  ScrollController scrollController = new ScrollController();
 
   ChatBloc() {
     Future<FirebaseUser> user = fireAuth.currentUser();
@@ -29,18 +30,20 @@ class ChatBloc extends SimpleStream<List<Message>> {
   }
 
   sendMessage(message) async {
-    await firestore.collection('messages').add({
-      "text": message,
-      "sender": userLogged.email,
-      "name": userLogged.displayName,
-      "createdAt": new DateTime.now().millisecondsSinceEpoch,
-    });
+    if (message != '') {
+      await firestore.collection('messages').add({
+        "text": message,
+        "sender": userLogged.email,
+        "name": userLogged.displayName,
+        "createdAt": new DateTime.now().millisecondsSinceEpoch,
+      });
+    }
   }
 
   listener() {
     firestore
         .collection('messages')
-        .orderBy('createdAt', descending: false)
+        .orderBy('createdAt', descending: true)
         .snapshots()
         .listen((event) {
       List<Message> messages = [];
@@ -50,6 +53,7 @@ class ChatBloc extends SimpleStream<List<Message>> {
             email: changes.data['sender'], name: changes.data['name']);
 
         Message message = new Message(
+          id: changes.documentID,
           text: changes.data['text'],
           user: userMessage,
           position: userLogged.email == userMessage.email
@@ -60,8 +64,6 @@ class ChatBloc extends SimpleStream<List<Message>> {
         messages.add(message);
 
         addToStream(messages);
-
-        scrollController.jumpTo(scrollController.position.maxScrollExtent);
       });
     });
   }

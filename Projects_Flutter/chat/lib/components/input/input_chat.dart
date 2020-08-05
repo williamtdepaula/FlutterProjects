@@ -17,6 +17,9 @@ class InputChat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      decoration: BoxDecoration(
+        border: Border(top: BorderSide(width: 2, color: Colors.green)),
+      ),
       padding: EdgeInsets.all(10),
       width: MediaQuery.of(context).size.width,
       child: Row(
@@ -27,9 +30,12 @@ class InputChat extends StatelessWidget {
               maxLines: null,
               controller: textEditingController,
               decoration: InputDecoration(
-                focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.green)),
-                border: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.green),
+                hintText: 'Digite uma mensagem...',
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(style: BorderStyle.none),
+                ),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(style: BorderStyle.none),
                 ),
               ),
             ),

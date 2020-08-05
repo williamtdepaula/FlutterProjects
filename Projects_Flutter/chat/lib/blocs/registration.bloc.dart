@@ -43,7 +43,7 @@ class RegistrationBloc extends SimpleStream<LoadingState>
 
       addToStream(LoadingState.notLoading);
 
-      Navigator.pushReplacementNamed(context, ChatScreen.id);
+      Navigator.pushNamedAndRemoveUntil(context, ChatScreen.id, (_) => false);
     } catch (e) {
       print('Error register $e');
     }

@@ -69,7 +69,7 @@ class _ChatScreenState extends State<ChatScreen> with ScreenWithKeyBoard {
         builder: (BuildContext context, snapshot) {
           if (snapshot.hasData) {
             return ListView.builder(
-              controller: _chatBloc.scrollController,
+              reverse: true,
               itemCount: snapshot.data.length,
               itemBuilder: (BuildContext context, index) {
                 return Bubble(

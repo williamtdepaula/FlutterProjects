@@ -1,3 +1,4 @@
+import 'package:chat/models/keyboard_page.dart';
 import 'package:chat/models/loading.dart';
 import 'package:chat/models/simpleStream.dart';
 import 'package:chat/models/userLogged.dart';
@@ -5,7 +6,7 @@ import 'package:chat/screens/chat.page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class LoginBloc extends SimpleStream<LoadingState> {
+class LoginBloc extends SimpleStream<LoadingState> with ScreenWithKeyBoard {
   TextEditingController textEmailController = new TextEditingController();
   TextEditingController textPasswordController = new TextEditingController();
 
@@ -30,6 +31,6 @@ class LoginBloc extends SimpleStream<LoadingState> {
 
     addToStream(LoadingState.notLoading);
 
-    Navigator.pushReplacementNamed(context, ChatScreen.id);
+    Navigator.pushNamedAndRemoveUntil(context, ChatScreen.id, (_) => false);
   }
 }

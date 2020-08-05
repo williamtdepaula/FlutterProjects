@@ -1,9 +1,11 @@
 import 'package:chat/blocs/registration.bloc.dart';
+import 'package:chat/components/buttons/button_likend.dart';
 import 'package:chat/components/buttons/default_button.dart';
 import 'package:chat/components/image/logo.dart';
 import 'package:chat/components/input/default_input.dart';
 import 'package:chat/models/keyboard_page.dart';
 import 'package:chat/models/loading.dart';
+import 'package:chat/screens/login.page.dart';
 import 'package:flutter/material.dart';
 
 class RegistrationScreen extends StatefulWidget {
@@ -13,7 +15,8 @@ class RegistrationScreen extends StatefulWidget {
   _RegistrationScreenState createState() => _RegistrationScreenState();
 }
 
-class _RegistrationScreenState extends State<RegistrationScreen> with ScreenWithKeyBoard{
+class _RegistrationScreenState extends State<RegistrationScreen>
+    with ScreenWithKeyBoard {
   RegistrationBloc _registrationBloc = new RegistrationBloc();
 
   @override
@@ -75,6 +78,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> with ScreenWith
                 loadingState: snapshot.data,
               );
             },
+          ),
+          ButtonLinked(
+            text: 'JÁ TENHO CONTA',
+            route: LoginScreen.id,
           ),
         ],
       ),

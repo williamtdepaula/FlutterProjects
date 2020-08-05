@@ -24,18 +24,14 @@ class _LoadingScreenState extends State<LoadingScreen> {
   autoLogin(context) async {
     final UserLogged user = await UserLogged.getUserLocal();
 
-    print('${user}');
-
     if (user != null) {
       await fireAuth.signInWithEmailAndPassword(
         email: user.email,
         password: user.password,
       );
-
-      Navigator.pushReplacementNamed(context, ChatScreen.id);
+      Navigator.pushNamedAndRemoveUntil(context, ChatScreen.id, (_) => false);
     } else {
-    print('Enterded');
-      Navigator.pushReplacementNamed(context, WelcomeScreen.id);
+      Navigator.pushNamedAndRemoveUntil(context, WelcomeScreen.id, (_) => false);
     }
   }
 
