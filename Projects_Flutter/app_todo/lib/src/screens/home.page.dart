@@ -1,5 +1,9 @@
+import 'package:app_todo/src/components/bottom_sheet/bottom_sheet_add_task.dart';
 import 'package:app_todo/src/components/list/item_todo.dart';
+import 'package:app_todo/src/models/task.dart';
+import 'package:app_todo/src/models/task_data.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   static final id = '/home';
@@ -14,8 +18,14 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: Colors.lightBlueAccent,
       body: _handlerRenderBody(),
+      resizeToAvoidBottomPadding: false,
       floatingActionButton: FloatingActionButton(
-        onPressed: null,
+        onPressed: () => showModalBottomSheet(
+          context: context,
+          builder: buildBottomSheet,
+          isScrollControlled: true,
+          backgroundColor: Color(0xFF757575),
+        ),
         backgroundColor: Colors.lightBlueAccent,
         child: Icon(
           Icons.add,
@@ -53,7 +63,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           Text(
-            '12 Tasks',
+            '${Provider.of<TaskData>(context).tasks.length} Tasks',
             style: TextStyle(
               color: Colors.white,
               fontSize: 20,
@@ -88,12 +98,30 @@ class _HomePageState extends State<HomePage> {
           topRight: Radius.circular(30),
         ),
       ),
-      child: ListView.builder(
-        itemCount: 2,
-        itemBuilder: (BuildContext contenxt, index) {
-          return ItemTodo();
+      child: Consumer<TaskData>(
+        builder: (BuildContext context, taskData, child) {
+          return ListView.builder(
+            itemCount: taskData.tasks.length,
+            itemBuilder: (BuildContext contenxt, index) {
+              Task currentTask = taskData.tasks[index];
+
+              return ItemTodo(
+                name: currentTask.name,
+                isDone: currentTask.isDone,
+                onToggleTask: () => taskData.toggleTask(currentTask),
+                onLongPressTask: () => taskData.deleteTask(currentTask),
+              );
+            },
+          );
         },
       ),
     );
   }
+
+  Widget buildBottomSheet(BuildContext context) => SingleChildScrollView(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        child: BottomSheetAddTask(),
+      );
 }
