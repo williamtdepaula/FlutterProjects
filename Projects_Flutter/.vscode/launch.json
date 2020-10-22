@@ -1,0 +1,80 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "app_todo",
+            "cwd": "app_todo",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "apptalk_prototype",
+            "cwd": "apptalk_prototype",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "bmi_calculator",
+            "cwd": "bmi_calculator",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "cars_flutter",
+            "cwd": "cars_flutter",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "chat",
+            "cwd": "chat",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "clima",
+            "cwd": "clima",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "dice",
+            "cwd": "dice",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "first_app_flutter",
+            "cwd": "first_app_flutter",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "getter",
+            "cwd": "getter",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "mi_card",
+            "cwd": "mi_card",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "spending_app",
+            "cwd": "spending_app",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "wake_on_point",
+            "cwd": "wake_on_point",
+            "request": "launch",
+            "type": "dart"
+        }
+    ]
+}
