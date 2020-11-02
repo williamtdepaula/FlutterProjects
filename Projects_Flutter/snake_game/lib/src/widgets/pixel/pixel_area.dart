@@ -3,10 +3,14 @@ import 'package:flutter/material.dart';
 class PixelArea extends StatelessWidget {
   final bool isSnake;
   final bool isPoint;
+  final bool isSuperPoint;
+  final Color snakeColor;
 
   PixelArea({
     this.isSnake = false,
     this.isPoint = false,
+    this.isSuperPoint = false,
+    this.snakeColor = Colors.white,
   });
 
   @override
@@ -20,8 +24,10 @@ class PixelArea extends StatelessWidget {
         color: this.isPoint
             ? Colors.green
             : isSnake
-                ? Colors.white
-                : Color(0xFF212121),
+                ? this.snakeColor
+                : isSuperPoint
+                    ? Colors.orange
+                    : Color(0xFF212121),
       ),
     );
   }

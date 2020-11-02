@@ -1,13 +1,19 @@
 import 'dart:math';
 
-class Points {
+import 'package:flutter/material.dart';
+import 'package:snake_game/src/models/point.dart';
+
+class Points extends Point {
   List<int> _indexOfPoints = [];
+  Color color;
+
+  Points({this.color = Colors.white});
 
   get getIndexOfPoints => this._indexOfPoints;
 
   get getTotalPoints => this._indexOfPoints.length;
 
-  void clear(){
+  void clear() {
     _indexOfPoints.clear();
   }
 
@@ -24,6 +30,7 @@ class Points {
     }
   }
 
+  @override
   bool isPoint(int index) {
     return this._indexOfPoints.indexOf(index) != -1;
   }

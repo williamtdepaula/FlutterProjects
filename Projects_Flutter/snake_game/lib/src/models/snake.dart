@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 enum SnakeDirection {
   left,
   right,
@@ -8,20 +10,32 @@ enum SnakeDirection {
 class Snake {
   int position;
   SnakeDirection direction;
+  Color color;
   List<int> body = [];
 
-  Snake({this.position, this.direction = SnakeDirection.bottom}) {
+  Snake({
+    this.position,
+    this.direction = SnakeDirection.bottom,
+    this.color = Colors.white,
+  }) {
     this.body.add(this.position); //Adiciona a cabeça ao corpo
   }
 
   int get totalPoints => this.body.length - 1;
 
-  void die(){
+  void changeToSuperSnake() {
+    this.color = Colors.orange;
+    this.addBody(size: 5);
+  }
+
+  void die() {
     this.body.clear();
   }
 
-  void addBody() {
-    this.body.add(position);
+  void addBody({int size = 1}) {
+    for (int i = 0; i < size; i++) {
+      this.body.add(position - i);
+    }
   }
 
   void moveBody() {

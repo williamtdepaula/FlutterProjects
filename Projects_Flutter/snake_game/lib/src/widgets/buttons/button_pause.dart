@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
 
-class Button extends StatelessWidget {
+class ButtonPause extends StatelessWidget {
   final Function onPressed;
-  final String text;
-  final Color colorText;
-  final Color backgroundColor;
+  final bool paused;
 
-  Button({
+  ButtonPause({
     this.onPressed,
-    this.text,
-    this.colorText = Colors.white,
-    this.backgroundColor = Colors.green,
+    this.paused = false,
   });
 
   @override
@@ -20,13 +16,13 @@ class Button extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: this.backgroundColor,
+          color: !paused ? Colors.red : Colors.green,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Text(
-          this.text,
+          !paused ? "Pausar" : "Voltar",
           style: TextStyle(
-            color: this.colorText,
+            color: Colors.white,
             fontSize: 16,
             fontWeight: FontWeight.w600,
           ),

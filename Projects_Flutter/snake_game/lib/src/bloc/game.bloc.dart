@@ -6,15 +6,20 @@ import 'package:snake_game/src/models/game.dart';
 import 'package:snake_game/src/models/pixels.dart';
 import 'package:snake_game/src/models/points.dart';
 import 'package:snake_game/src/models/snake.dart';
+import 'package:snake_game/src/models/timerGame.dart';
 import 'package:snake_game/src/utils/simple_stream.dart';
+import 'package:snake_game/src/widgets/modals/modal_end_game.dart';
 
 class GameBloc extends SimpleStream {
   Pixels pixels = new Pixels(totalPixels: 540, totalColumns: 20);
   Snake snake = new Snake(position: 0, direction: SnakeDirection.right);
   Points points = new Points();
+  TimerGame _timerGame;
 
   Timer _timerSnakeMove;
   Timer _timerCreatePoint;
+  Timer _timerCreateSuperPoint;
+
   bool gameIsPlaying;
 
   double _initalPositionDragHorizontal;
@@ -26,16 +31,17 @@ class GameBloc extends SimpleStream {
     this.gameIsPlaying = true;
 
     this.startGame();
-    
     this._sendToViewAppStatus();
   }
 
   void startGame() {
-    this._timerSnakeMove =
-        Timer.periodic(Duration(milliseconds: 100), (_) => _onSnakeMove());
+    _timerGame = new TimerGame(
+      onTimerCreatePoint: () =>
+          points.generatePoints(pixels.totalPixels, Random().nextInt(5)),
+      onTimerSnakeMove: () => _onSnakeMove(),
+    );
 
-    this._timerCreatePoint = Timer.periodic(Duration(seconds: 10),
-        (_) => points.generatePoints(pixels.totalPixels, Random().nextInt(5)));
+    _timerGame.initTimers();
   }
 
   void onHorizontalDragStart(DragStartDetails dragStartDetails) {
@@ -146,25 +152,26 @@ class GameBloc extends SimpleStream {
   }
 
   void pauseGame() {
-
     this.gameIsPlaying = false;
-    this._timerSnakeMove.cancel();
-    this._timerCreatePoint.cancel();
+    
+    this._timerGame.stopTimers();
 
     this._sendToViewAppStatus();
-    
   }
 
   void onEndGame() {
     snake.die();
     points.clear();
-    this._timerSnakeMove.cancel();
-    this._timerCreatePoint.cancel();
+    this._timerGame.stopTimers();
 
     this._sendToViewAppStatus();
   }
 
   void _sendToViewAppStatus() {
-    add(Game(snake: this.snake, points: this.points, gamePlaying: this.gameIsPlaying));
+    add(Game(
+      snake: this.snake,
+      points: this.points,
+      gamePlaying: this.gameIsPlaying,
+    ));
   }
 }

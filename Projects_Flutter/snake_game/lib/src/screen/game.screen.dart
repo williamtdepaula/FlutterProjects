@@ -3,7 +3,7 @@ import 'package:snake_game/src/bloc/game.bloc.dart';
 import 'package:snake_game/src/models/game.dart';
 import 'package:snake_game/src/models/points.dart';
 import 'package:snake_game/src/models/snake.dart';
-import 'package:snake_game/src/widgets/buttons/button.dart';
+import 'package:snake_game/src/widgets/buttons/button_pause.dart';
 import 'package:snake_game/src/widgets/pixel/pixel_area.dart';
 
 class GameScreen extends StatefulWidget {
@@ -70,6 +70,7 @@ class _GameScreenState extends State<GameScreen> {
                   return PixelArea(
                     isSnake: snake.isBody(index),
                     isPoint: points.isPoint(index),
+                    //isSuperPoint: superPoint.isPoint(index),
                   );
                 },
               ),
@@ -81,10 +82,8 @@ class _GameScreenState extends State<GameScreen> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Button(
-                      text: game.gamePlaying ? "Pausar" : "Voltar",
-                      backgroundColor:
-                          game.gamePlaying ? Colors.red : Colors.green,
+                    ButtonPause(
+                      paused: !game.gamePlaying,
                       onPressed: game.gamePlaying
                           ? gameBloc.pauseGame
                           : gameBloc.initGame,
