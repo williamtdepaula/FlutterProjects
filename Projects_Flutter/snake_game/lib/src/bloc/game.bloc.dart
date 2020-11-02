@@ -15,10 +15,7 @@ class GameBloc extends SimpleStream {
   Snake snake = new Snake(position: 0, direction: SnakeDirection.right);
   Points points = new Points();
   TimerGame _timerGame;
-
-  Timer _timerSnakeMove;
-  Timer _timerCreatePoint;
-  Timer _timerCreateSuperPoint;
+  BuildContext context;
 
   bool gameIsPlaying;
 
@@ -27,7 +24,9 @@ class GameBloc extends SimpleStream {
   double _initalPositionDragVertical;
   double _distanceDragVerical;
 
-  void initGame() {
+  void initGame(BuildContext context) {
+    this.context = context;
+
     this.gameIsPlaying = true;
 
     this.startGame();
@@ -107,7 +106,7 @@ class GameBloc extends SimpleStream {
     if (!snake.isBody(snake.position)) {
       //Verifica se está passando por um ponto
       if (points.isPoint(snake.position)) {
-        snake.addBody();
+        snake.addBody(size: 30);
         points.removePoint(snake.position);
       }
 
@@ -153,18 +152,26 @@ class GameBloc extends SimpleStream {
 
   void pauseGame() {
     this.gameIsPlaying = false;
-    
+
     this._timerGame.stopTimers();
 
     this._sendToViewAppStatus();
   }
 
   void onEndGame() {
+    showModalEndGame(context, totalPoints: this.snake.totalPoints, onPressToRestart: this._restartGame );
+    
     snake.die();
     points.clear();
     this._timerGame.stopTimers();
 
     this._sendToViewAppStatus();
+    
+  }
+
+  void _restartGame(){
+    this._timerGame.restartTimers();
+
   }
 
   void _sendToViewAppStatus() {

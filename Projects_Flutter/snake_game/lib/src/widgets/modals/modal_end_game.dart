@@ -16,7 +16,10 @@ showModalEndGame(BuildContext context,
     ) {
       return Transform.scale(
         scale: animationOne.value,
-        child: ModalEndGame(totalPoints: totalPoints),
+        child: ModalEndGame(
+          totalPoints: totalPoints,
+          onPressToRestart: onPressToRestart,
+        ),
       );
     },
     transitionDuration: Duration(milliseconds: 100),
@@ -44,16 +47,32 @@ class ModalEndGame extends StatelessWidget {
               ),
               textAlign: TextAlign.center,
             ),
+            SizedBox(
+              height: 20,
+            ),
+            Text(
+              'Você fez ${this.totalPoints} pontos!',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w900,
+                fontSize: 20,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(
+              height: 20,
+            ),
             InkWell(
               child: Text(
                 'Reiniciar',
                 style: TextStyle(
-                  color: Colors.black,
+                  color: Colors.white,
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
                 ),
               ),
               onTap: () {
+                print("aqui1");
                 onPressToRestart();
                 Navigator.pop(context);
               },

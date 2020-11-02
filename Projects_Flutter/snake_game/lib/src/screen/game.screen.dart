@@ -20,7 +20,7 @@ class _GameScreenState extends State<GameScreen> {
   void initState() {
     super.initState();
 
-    gameBloc.initGame();
+    gameBloc.initGame(context);
   }
 
   @override
