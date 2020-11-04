@@ -9,8 +9,6 @@ enum PixelsNextPosition {
 
 class Pixels {
   int totalPixels = 500;
-  int heightPixel = 30;
-  int widthPixel = 30;
   int totalColumns = 20;
   int _totalOfRows = 0;
   List<int> totalItemsByRow = [];

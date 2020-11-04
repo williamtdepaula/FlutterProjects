@@ -17,7 +17,7 @@ class TimerGame {
         Timer.periodic(Duration(milliseconds: 100), (_) => onTimerSnakeMove());
 
     this._timerCreatePoint =
-        Timer.periodic(Duration(seconds: 10), (_) => onTimerCreatePoint());
+        Timer.periodic(Duration(seconds: 15), (_) => onTimerCreatePoint());
 
   }
 

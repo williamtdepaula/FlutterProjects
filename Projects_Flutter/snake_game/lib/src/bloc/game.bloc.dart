@@ -19,11 +19,6 @@ class GameBloc extends SimpleStream {
 
   bool gameIsPlaying;
 
-  double _initalPositionDragHorizontal;
-  double _distanceDragHorizontal;
-  double _initalPositionDragVertical;
-  double _distanceDragVerical;
-
   void initGame(BuildContext context) {
     this.context = context;
 
@@ -34,7 +29,7 @@ class GameBloc extends SimpleStream {
   }
 
   void _configGame() {
-    this.pixels = new Pixels(totalPixels: 540, totalColumns: 20);
+    this.pixels = new Pixels(totalPixels: 740, totalColumns: 20);
     this.snake = new Snake(position: 0, direction: SnakeDirection.right);
     this.points = new Points(color: Colors.green);
   }
@@ -81,37 +76,15 @@ class GameBloc extends SimpleStream {
     this.startGame();
   }
 
-  void onHorizontalDragStart(DragStartDetails dragStartDetails) {
-    this._initalPositionDragHorizontal = dragStartDetails.globalPosition.dx;
-  }
-
   void onHorizontalDragUpdate(DragUpdateDetails dragUpdateDetails) {
-    this._distanceDragHorizontal = dragUpdateDetails.globalPosition.dx -
-        this._initalPositionDragHorizontal;
-  }
-
-  void onHorizontalDragEnd(DragEndDetails dragEndDetails) {
-    this._initalPositionDragHorizontal = 0.0;
-
-    if (_distanceDragHorizontal > 0.0)
+    if (dragUpdateDetails.delta.dx > 0)
       onDragToRight();
     else
       onDragToLeft();
   }
-
-  void onVerticalDragStart(DragStartDetails dragStartDetails) {
-    this._initalPositionDragVertical = dragStartDetails.globalPosition.dy;
-  }
-
+  
   void onVerticalDragUpdate(DragUpdateDetails dragUpdateDetails) {
-    this._distanceDragVerical =
-        dragUpdateDetails.globalPosition.dy - this._initalPositionDragVertical;
-  }
-
-  void onVerticalDragEnd(DragEndDetails dragEndDetails) {
-    this._initalPositionDragVertical = 0.0;
-
-    if (_distanceDragVerical > 0.0)
+    if (dragUpdateDetails.delta.dy > 0)
       onDragToBottom();
     else
       onDragToTop();

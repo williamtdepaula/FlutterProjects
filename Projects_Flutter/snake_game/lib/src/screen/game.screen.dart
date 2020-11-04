@@ -36,12 +36,8 @@ class _GameScreenState extends State<GameScreen> {
   Widget _handlerRenderBody() {
     return SafeArea(
       child: GestureDetector(
-        onHorizontalDragStart: gameBloc.onHorizontalDragStart,
         onHorizontalDragUpdate: gameBloc.onHorizontalDragUpdate,
-        onHorizontalDragEnd: gameBloc.onHorizontalDragEnd,
-        onVerticalDragStart: gameBloc.onVerticalDragStart,
         onVerticalDragUpdate: gameBloc.onVerticalDragUpdate,
-        onVerticalDragEnd: gameBloc.onVerticalDragEnd,
         child: this._handlerRenderGame(),
       ),
     );
@@ -62,7 +58,7 @@ class _GameScreenState extends State<GameScreen> {
         return Column(
           children: [
             Expanded(
-              flex: 10,
+              flex: 8,
               child: GridView.builder(
                 physics: NeverScrollableScrollPhysics(),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -81,39 +77,53 @@ class _GameScreenState extends State<GameScreen> {
             Expanded(
               child: Padding(
                 padding: EdgeInsets.all(10),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisSize: MainAxisSize.max,
                   children: [
+                    Text(
+                      'Created By William Tristão de Paula',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 14),
+                    ),
+                    SizedBox(height: 10),
                     Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        ButtonPause(
-                          paused: !game.gamePlaying,
-                          onPressed: game.gamePlaying
-                              ? gameBloc.pauseGame
-                              : gameBloc.unPauseGame,
+                        Row(
+                          children: [
+                            ButtonPause(
+                              paused: !game.gamePlaying,
+                              onPressed: game.gamePlaying
+                                  ? gameBloc.pauseGame
+                                  : gameBloc.unPauseGame,
+                            ),
+                            SizedBox(
+                              width: 20,
+                            ),
+                            Button(
+                              text: 'Reiniciar',
+                              onPressed: gameBloc.restartGame,
+                            ),
+                          ],
                         ),
-                        SizedBox(
-                          width: 20,
-                        ),
-                        Button(
-                          text: 'Reiniciar',
-                          onPressed: gameBloc.restartGame,
+                        Text(
+                          'Pontos: ${snake.totalPoints}',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 16,
+                          ),
                         ),
                       ],
-                    ),
-                    Text(
-                      'Pontos: ${snake.totalPoints}',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 16,
-                      ),
                     ),
                   ],
                 ),
               ),
-            )
+            ),
           ],
         );
       },
