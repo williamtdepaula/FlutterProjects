@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 enum PixelsNextPosition {
   nextLeftPosition,
   nextRightPosition,
@@ -10,20 +12,24 @@ class Pixels {
   int heightPixel = 30;
   int widthPixel = 30;
   int totalColumns = 20;
+  int _totalOfRows = 0;
   List<int> totalItemsByRow = [];
 
-  Pixels({this.totalPixels, this.totalColumns}) {
+  Pixels({
+    this.totalPixels,
+    this.totalColumns,
+  }) {
+    this.calcTotalOfRows();
     this._generateListTotalItemsByRow();
   }
 
   void _generateListTotalItemsByRow() {
-    totalItemsByRow = List.generate(
-        int.parse((this.getTotalOfRows()).toString()),
+    totalItemsByRow = List.generate(int.parse((this._totalOfRows).toString()),
         (index) => (index + 1) * this.totalColumns);
   }
 
-  int getTotalOfRows() {
-    return (this.totalPixels / this.totalColumns).round();
+  void calcTotalOfRows() {
+    this._totalOfRows = (this.totalPixels / this.totalColumns).round();
   }
 
   //Retorna a posição do pixel
@@ -35,10 +41,10 @@ class Pixels {
     //Verifica qual é a linha
     this.totalItemsByRow.asMap().forEach((index, totalItemsInRow) {
       if (index == 0) {
-        if (position <= totalItemsInRow) row = index + 1;
+        if (position <= totalItemsInRow) row = index;
       } else {
         if (position <= totalItemsInRow &&
-            position > this.totalItemsByRow[index - 1]) row = index + 1;
+            position > this.totalItemsByRow[index - 1]) row = index;
       }
     });
 
@@ -46,8 +52,7 @@ class Pixels {
   }
 
   int getNextPixel(int currentPosition, PixelsNextPosition nextPosition) {
-    int indexRowOfCurrentPosition = this.getPixelRow(currentPosition) - 1;
-    int totalRows = this.getTotalOfRows();
+    int indexRowOfCurrentPosition = this.getPixelRow(currentPosition);
 
     if (nextPosition == PixelsNextPosition.nextRightPosition) {
       //Está no último pixel da linha
@@ -64,13 +69,10 @@ class Pixels {
       //Está no primeiro pixel
 
       if (currentPosition ==
-          this.totalItemsByRow[indexRowOfCurrentPosition+1] - (this.totalColumns)) {
-
-        return this.totalItemsByRow[indexRowOfCurrentPosition+1]-1;
+          this.totalItemsByRow[indexRowOfCurrentPosition + 1] -
+              (this.totalColumns)) {
+        return this.totalItemsByRow[indexRowOfCurrentPosition + 1] - 1;
       }
-      /*} else {
-        return currentPosition - 1;
-      }*/
 
       return currentPosition - 1;
     }
@@ -84,22 +86,21 @@ class Pixels {
                 (this.totalColumns - currentPosition);
 
         return nextPosition;
-      } else {
-        return currentPosition - this.totalColumns;
       }
+
+      return currentPosition - this.totalColumns;
     }
 
     if (nextPosition == PixelsNextPosition.nextBottomPosition) {
       //Está na última linha
-      if (indexRowOfCurrentPosition == (totalRows - 1)) {
+      if (indexRowOfCurrentPosition == (this._totalOfRows - 1)) {
         //vai para a primeira linha
         int nextPosition =
             this.totalColumns - (this.totalPixels - currentPosition);
 
         return nextPosition;
-      } else {
-        return currentPosition + this.totalColumns;
       }
+      return currentPosition + this.totalColumns;
     }
 
     return currentPosition;

@@ -11,9 +11,9 @@ import 'package:snake_game/src/utils/simple_stream.dart';
 import 'package:snake_game/src/widgets/modals/modal_end_game.dart';
 
 class GameBloc extends SimpleStream {
-  Pixels pixels = new Pixels(totalPixels: 540, totalColumns: 20);
-  Snake snake = new Snake(position: 0, direction: SnakeDirection.right);
-  Points points = new Points();
+  Pixels pixels;
+  Snake snake;
+  Points points;
   TimerGame _timerGame;
   BuildContext context;
 
@@ -33,7 +33,15 @@ class GameBloc extends SimpleStream {
     this._sendToViewAppStatus();
   }
 
+  void _configGame() {
+    this.pixels = new Pixels(totalPixels: 540, totalColumns: 20);
+    this.snake = new Snake(position: 0, direction: SnakeDirection.right);
+    this.points = new Points(color: Colors.green);
+  }
+
   void startGame() {
+    this._configGame();
+
     _timerGame = new TimerGame(
       onTimerCreatePoint: () =>
           points.generatePoints(pixels.totalPixels, Random().nextInt(5)),
@@ -41,6 +49,36 @@ class GameBloc extends SimpleStream {
     );
 
     _timerGame.initTimers();
+  }
+
+  void pauseGame() {
+    this.gameIsPlaying = false;
+
+    this._timerGame.stopTimers();
+
+    this._sendToViewAppStatus();
+  }
+
+  void unPauseGame() {
+    this._timerGame.restartTimers();
+  }
+
+  void onEndGame() {
+    showModalEndGame(
+      context,
+      totalPoints: this.snake.totalPoints,
+      onPressToRestart: this.restartGame,
+    );
+
+    snake.die();
+    points.clear();
+    this._timerGame.stopTimers();
+
+    this._sendToViewAppStatus();
+  }
+
+  void restartGame() {
+    this.startGame();
   }
 
   void onHorizontalDragStart(DragStartDetails dragStartDetails) {
@@ -106,7 +144,7 @@ class GameBloc extends SimpleStream {
     if (!snake.isBody(snake.position)) {
       //Verifica se está passando por um ponto
       if (points.isPoint(snake.position)) {
-        snake.addBody(size: 30);
+        snake.addBody();
         points.removePoint(snake.position);
       }
 
@@ -148,30 +186,6 @@ class GameBloc extends SimpleStream {
     }
 
     return 0;
-  }
-
-  void pauseGame() {
-    this.gameIsPlaying = false;
-
-    this._timerGame.stopTimers();
-
-    this._sendToViewAppStatus();
-  }
-
-  void onEndGame() {
-    showModalEndGame(context, totalPoints: this.snake.totalPoints, onPressToRestart: this._restartGame );
-    
-    snake.die();
-    points.clear();
-    this._timerGame.stopTimers();
-
-    this._sendToViewAppStatus();
-    
-  }
-
-  void _restartGame(){
-    this._timerGame.restartTimers();
-
   }
 
   void _sendToViewAppStatus() {

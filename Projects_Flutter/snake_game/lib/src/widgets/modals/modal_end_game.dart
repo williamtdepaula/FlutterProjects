@@ -5,7 +5,7 @@ showModalEndGame(BuildContext context,
   showGeneralDialog(
     context: context,
     pageBuilder: ((context, animation1, animation2) {}),
-    barrierDismissible: true,
+    barrierDismissible: false,
     barrierColor: Color(0x80000000),
     barrierLabel: "Dismiss",
     transitionBuilder: (
@@ -31,6 +31,11 @@ class ModalEndGame extends StatelessWidget {
   final Function onPressToRestart;
 
   ModalEndGame({this.totalPoints, this.onPressToRestart});
+
+  void onPressToRestartGame(BuildContext context) {
+    this.onPressToRestart();
+    Navigator.pop(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,11 +76,7 @@ class ModalEndGame extends StatelessWidget {
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              onTap: () {
-                print("aqui1");
-                onPressToRestart();
-                Navigator.pop(context);
-              },
+              onTap: () => this.onPressToRestartGame(context),
             ),
           ],
         ),

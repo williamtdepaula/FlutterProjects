@@ -21,7 +21,7 @@ class Snake {
     this.body.add(this.position); //Adiciona a cabeça ao corpo
   }
 
-  int get totalPoints => this.body.length - 1;
+  int get totalPoints => this.body.length > 0 ? this.body.length - 1 : 0;
 
   void changeToSuperSnake() {
     this.color = Colors.orange;

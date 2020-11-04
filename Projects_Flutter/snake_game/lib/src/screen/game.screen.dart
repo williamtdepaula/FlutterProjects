@@ -3,6 +3,7 @@ import 'package:snake_game/src/bloc/game.bloc.dart';
 import 'package:snake_game/src/models/game.dart';
 import 'package:snake_game/src/models/points.dart';
 import 'package:snake_game/src/models/snake.dart';
+import 'package:snake_game/src/widgets/buttons/button.dart';
 import 'package:snake_game/src/widgets/buttons/button_pause.dart';
 import 'package:snake_game/src/widgets/pixel/pixel_area.dart';
 
@@ -20,7 +21,9 @@ class _GameScreenState extends State<GameScreen> {
   void initState() {
     super.initState();
 
-    gameBloc.initGame(context);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      gameBloc.initGame(context);
+    });
   }
 
   @override
@@ -68,9 +71,9 @@ class _GameScreenState extends State<GameScreen> {
                 itemCount: gameBloc.pixels.totalPixels,
                 itemBuilder: (BuildContext context, int index) {
                   return PixelArea(
-                    isSnake: snake.isBody(index),
-                    isPoint: points.isPoint(index),
-                    //isSuperPoint: superPoint.isPoint(index),
+                    snake: snake,
+                    points: points,
+                    position: index,
                   );
                 },
               ),
@@ -82,11 +85,22 @@ class _GameScreenState extends State<GameScreen> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    ButtonPause(
-                      paused: !game.gamePlaying,
-                      onPressed: game.gamePlaying
-                          ? gameBloc.pauseGame
-                          : gameBloc.initGame,
+                    Row(
+                      children: [
+                        ButtonPause(
+                          paused: !game.gamePlaying,
+                          onPressed: game.gamePlaying
+                              ? gameBloc.pauseGame
+                              : gameBloc.unPauseGame,
+                        ),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        Button(
+                          text: 'Reiniciar',
+                          onPressed: gameBloc.restartGame,
+                        ),
+                      ],
                     ),
                     Text(
                       'Pontos: ${snake.totalPoints}',
