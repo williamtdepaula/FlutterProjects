@@ -25,6 +25,8 @@ class _HomeScreenState extends State<HomeScreen> {
             hintStyle: TextStyle(color: Colors.white),
             border: InputBorder.none,
           ),
+          style: TextStyle(color: Colors.white),
+          onChanged: _controllerHome.setFilter,
         ),
         centerTitle: false,
       ),
@@ -44,10 +46,10 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Observer(
         builder: (_) {
           return ListView.builder(
-            itemCount: _controllerHome.listItems.length,
+            itemCount: _controllerHome.filteredList.length,
             itemBuilder: (BuildContext context, int index) {
               return ItemTodo(
-                itemModel: _controllerHome.listItems[index],
+                itemModel: _controllerHome.filteredList[index],
                 onRemove: _controllerHome.removeItem,
               );
             },

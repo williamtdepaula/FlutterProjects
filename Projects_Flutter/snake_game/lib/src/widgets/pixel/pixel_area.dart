@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:snake_game/src/models/points.dart';
+import 'package:snake_game/src/models/foods.dart';
 import 'package:snake_game/src/models/snake.dart';
 
 class PixelArea extends StatelessWidget {
   final Snake snake;
-  final Points points;
+  final Foods foods;
   final int position;
 
   PixelArea({
     this.snake,
-    this.points,
+    this.foods,
     this.position,
   });
 
@@ -21,11 +21,13 @@ class PixelArea extends StatelessWidget {
       margin: EdgeInsets.all(1),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(1),
-        color: points.isPoint(position)
-            ? points.color
+        color: snake.isHead(position)
+            ? snake.colorHead
             : snake.isBody(position)
-                ? snake.color
-                :  Color(0xFF212121),
+                ? snake.colorBody
+                : foods.isFood(position)
+                    ? foods.color
+                    : Color(0xFF212121),
       ),
     );
   }

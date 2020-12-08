@@ -10,29 +10,40 @@ enum SnakeDirection {
 class Snake {
   int position;
   SnakeDirection direction;
-  Color color;
+  Color colorBody;
+  Color colorHead;
+  int initialSize;
   List<int> body = [];
 
   Snake({
     this.position,
     this.direction = SnakeDirection.bottom,
-    this.color = Colors.white,
+    this.colorBody = Colors.white,
+    this.colorHead = Colors.grey,
+    this.initialSize = 1,
   }) {
-    this.body.add(this.position); //Adiciona a cabeça ao corpo
+    //Evita que o tamanho inicial da snake seja maior do que o espaço que ela tem para iniciar
+    if ((position + 1) < this.initialSize) position = this.initialSize;
+    this._addBody(size: this.initialSize); //Adiciona a cabeça ao corpo
   }
 
-  int get totalPoints => this.body.length > 0 ? this.body.length - 1 : 0;
-
-  void changeToSuperSnake() {
-    this.color = Colors.orange;
-    this.addBody(size: 5);
-  }
+  int get totalPoints => this.body.length > this.initialSize
+      ? this.body.length - this.initialSize
+      : 0;
 
   void die() {
     this.body.clear();
   }
 
-  void addBody({int size = 1}) {
+  void eatFood() {
+    this._addBody();
+  }
+
+  void eatSeveralFoods(int amount) {
+    this._addBody(size: amount);
+  }
+
+  void _addBody({int size = 1}) {
     for (int i = 0; i < size; i++) {
       this.body.add(position - i);
     }
@@ -56,5 +67,13 @@ class Snake {
 
   bool isBody(int index) {
     return this.body.indexOf(index) != -1;
+  }
+
+  bool isHead(int index) {
+    return this.body.length > 0 ? index == this.body[0] : false;
+  }
+
+  int positionOfBody(int index) {
+    return this.body.indexOf(index);
   }
 }

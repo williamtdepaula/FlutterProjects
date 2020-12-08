@@ -7,11 +7,23 @@ class ControllerHome = _ControllerHomeBase with _$ControllerHome;
 abstract class _ControllerHomeBase with Store {
   @observable
   ObservableList<ItemModel> listItems = [
-    ItemModel(title: 'Teste', checked: true),
-    ItemModel(title: '123', checked: false),
-    ItemModel(title: 'abc', checked: false),
-    ItemModel(title: 'teste123', checked: false)
+    ItemModel(title: 'Estudar', checked: true),
   ].asObservable();
+
+  @observable
+  String filter = '';
+
+  @computed
+  List<ItemModel> get filteredList {
+    if (filter.isEmpty) return listItems;
+    return listItems
+        .where(
+            (ItemModel item) => item.title.contains(this.filter.toLowerCase()))
+        .toList();
+  }
+
+  @action
+  void setFilter(String value) => this.filter = value;
 
   @action
   void addItem(ItemModel itemModel) {
