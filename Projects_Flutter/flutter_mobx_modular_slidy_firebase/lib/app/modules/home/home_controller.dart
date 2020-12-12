@@ -34,7 +34,7 @@ abstract class _HomeControllerBase with Store {
   Future init() async {
     List<String> localItems = await this._storageHive.get('list');
 
-    if (localItems.isNotEmpty) {
+    if (localItems != null && localItems.isNotEmpty) {
       listItems = localItems.asObservable();
     }
   }

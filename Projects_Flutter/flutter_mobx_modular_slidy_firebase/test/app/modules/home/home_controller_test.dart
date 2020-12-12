@@ -28,4 +28,20 @@ void main() {
 
     expect(listStorage[0], 'teste');
   });
+
+  test('Remover item', () async {
+    HomeController homeController = Modular.get();
+
+    homeController.setItem('teste');
+
+    homeController.addItem();
+
+    homeController.removeItem('teste');
+
+    expect(homeController.listItems.length, 0);
+
+    List<String> listStorage = await Modular.get<ILocalStorage>().get('key');
+
+    expect(listStorage.isEmpty, true);
+  });
 }
