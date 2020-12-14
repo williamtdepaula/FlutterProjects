@@ -1,3 +1,4 @@
+import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_dogs/app/modules/detail_breed/models/breed_image.dart';
 import 'package:flutter_dogs/app/modules/home/models/breed.dart';
@@ -11,41 +12,38 @@ class DogsRepository implements IDogsRepository {
   DogsRepository({this.dogsDataSource});
 
   @override
-  Future<List<Breed>> getBreeds() async {
+  Future<Either<FailureBreed, List<Breed>>> getBreeds() async {
     try {
       Response response = await dogsDataSource.getBreeds();
 
-      if (response.statusCode == 200) {
-        //print(response.data);
+      String status = response.data['status'];
 
-        String status = response.data['status'];
+      if (status == 'success') {
+        final message = response.data['message'];
 
-        if (status == 'success') {
-          final message = response.data['message'];
+        List<Breed> breeds = [];
 
-          List<Breed> breeds = [];
+        message.entries
+            .forEach((value) => breeds.add(Breed(breedName: value.key)));
 
-          message.entries
-              .forEach((value) => breeds.add(Breed(breedName: value.key)));
-
-          return breeds;
-        } else {
-          throw BreedError();
-        }
+        return Right(breeds);
       } else {
-        throw BreedError();
+        return Left(BreedError());
       }
     } catch (e) {
-      throw BreedError();
+      return Left(BreedError());
     }
   }
 
   @override
-  Future<List<BreedImage>> getBreedImages(Breed breed) async {
+  Future<Either<FailureBreed, List<BreedImage>>> getBreedImages(
+    Breed breed,
+  ) async {
     if (breed != null) {
-      Response response = await dogsDataSource.getBreedImages(breed.breedName);
+      try {
+        Response response =
+            await dogsDataSource.getBreedImages(breed.breedName);
 
-      if (response.statusCode == 200) {
         String status = response.data['status'];
 
         if (status == 'success') {
@@ -56,12 +54,14 @@ class DogsRepository implements IDogsRepository {
           message.forEach(
               (value) => breedImages.add(BreedImage(urlPicture: value)));
 
-          return breedImages;
-        } else {
-          throw BreedError();
+          return Right(breedImages);
         }
+      } catch (e) {
+        print("aqui123");
+        return Left(BreedImagesError());
       }
     }
-    throw ('teste');
+
+    return Left(IncompletDataError());
   }
 }

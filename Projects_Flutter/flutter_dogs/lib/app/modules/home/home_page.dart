@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dogs/app/modules/home/components/item_list/item_list_breed.dart';
 import 'package:flutter_dogs/app/modules/home/models/breed.dart';
+import 'package:flutter_dogs/app/shared/components/warning/error_load.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
@@ -21,7 +22,16 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Raças'),
+        title: TextField(
+          decoration: InputDecoration(
+            hintText: 'Buscar uma raça',
+            hintStyle: TextStyle(color: Colors.white),
+            border: InputBorder.none,
+          ),
+          style: TextStyle(color: Colors.white),
+          onChanged: controller.setFilter,
+        ),
+        centerTitle: false,
       ),
       body: _handlerRenderBody(),
     );
@@ -31,18 +41,22 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
     return SafeArea(
       child: Observer(
         builder: (_) {
-          return controller.loading
-              ? Center(child: CircularProgressIndicator())
-              : ListView.builder(
-                  itemCount: controller.breeds.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    Breed breed = controller.breeds[index];
+          return controller.warning != null
+              ? ErrorLoad(
+                  onReload: controller.loadBreeds,
+                )
+              : controller.loading
+                  ? Center(child: CircularProgressIndicator())
+                  : ListView.builder(
+                      itemCount: controller.filteredList.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        Breed breed = controller.filteredList[index];
 
-                    return ItemListBreed(
-                      breed: breed,
+                        return ItemListBreed(
+                          breed: breed,
+                        );
+                      },
                     );
-                  },
-                );
         },
       ),
     );

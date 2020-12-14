@@ -8,7 +8,7 @@ import 'home_page.dart';
 class HomeModule extends ChildModule {
   @override
   List<Bind> get binds => [
-        Bind(
+        Bind<HomeController>(
           (i) => HomeController(dogsRepository: i.get<DogsRepository>()),
         ),
       ];

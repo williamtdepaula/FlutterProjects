@@ -19,6 +19,14 @@ final $HomeController = BindInject(
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$HomeController on _HomeControllerBase, Store {
+  Computed<List<Breed>> _$filteredListComputed;
+
+  @override
+  List<Breed> get filteredList => (_$filteredListComputed ??=
+          Computed<List<Breed>>(() => super.filteredList,
+              name: '_HomeControllerBase.filteredList'))
+      .value;
+
   final _$loadingAtom = Atom(name: '_HomeControllerBase.loading');
 
   @override
@@ -31,6 +39,21 @@ mixin _$HomeController on _HomeControllerBase, Store {
   set loading(bool value) {
     _$loadingAtom.reportWrite(value, super.loading, () {
       super.loading = value;
+    });
+  }
+
+  final _$warningAtom = Atom(name: '_HomeControllerBase.warning');
+
+  @override
+  FailureBreed get warning {
+    _$warningAtom.reportRead();
+    return super.warning;
+  }
+
+  @override
+  set warning(FailureBreed value) {
+    _$warningAtom.reportWrite(value, super.warning, () {
+      super.warning = value;
     });
   }
 
@@ -49,16 +72,41 @@ mixin _$HomeController on _HomeControllerBase, Store {
     });
   }
 
-  final _$onLoadWidgetAsyncAction =
-      AsyncAction('_HomeControllerBase.onLoadWidget');
+  final _$filterAtom = Atom(name: '_HomeControllerBase.filter');
 
   @override
-  Future<dynamic> onLoadWidget() {
-    return _$onLoadWidgetAsyncAction.run(() => super.onLoadWidget());
+  String get filter {
+    _$filterAtom.reportRead();
+    return super.filter;
+  }
+
+  @override
+  set filter(String value) {
+    _$filterAtom.reportWrite(value, super.filter, () {
+      super.filter = value;
+    });
+  }
+
+  final _$loadBreedsAsyncAction = AsyncAction('_HomeControllerBase.loadBreeds');
+
+  @override
+  Future<dynamic> loadBreeds() {
+    return _$loadBreedsAsyncAction.run(() => super.loadBreeds());
   }
 
   final _$_HomeControllerBaseActionController =
       ActionController(name: '_HomeControllerBase');
+
+  @override
+  void setFilter(String value) {
+    final _$actionInfo = _$_HomeControllerBaseActionController.startAction(
+        name: '_HomeControllerBase.setFilter');
+    try {
+      return super.setFilter(value);
+    } finally {
+      _$_HomeControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   void setLoading(bool value) {
@@ -72,10 +120,24 @@ mixin _$HomeController on _HomeControllerBase, Store {
   }
 
   @override
+  dynamic openBreed(Breed breed) {
+    final _$actionInfo = _$_HomeControllerBaseActionController.startAction(
+        name: '_HomeControllerBase.openBreed');
+    try {
+      return super.openBreed(breed);
+    } finally {
+      _$_HomeControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 loading: ${loading},
-breeds: ${breeds}
+warning: ${warning},
+breeds: ${breeds},
+filter: ${filter},
+filteredList: ${filteredList}
     ''';
   }
 }
